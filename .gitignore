@@ -1,0 +1,30 @@
+# Secrets & real credentials
+.env
+*.pem
+*.key
+id_rsa*
+
+# Real runtime config (may contain real IPs, keys, provider names)
+/config/magic_router_config.json
+/config/magic_proxy_config.json
+config.local.json
+
+# Runtime state & audit logs
+/state/
+*.jsonl
+!README.md
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Editor / project specific cruft
+.vscode/
+.idea/
