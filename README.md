@@ -53,10 +53,8 @@ You want **both**: local for the easy 80%, cloud for the hard 20%. Existing tool
 
 ## ✨ Features / 特性
 
-- 🪄 **Touchless secret-code control.** Slip `dylup` / `dylgo` into your prompt to
-  escalate or drop back *instantly* — no menus, no config, no breaking flow.
-- 🪄 **零触碰暗号控制。** 把 `dylup` / `dylgo` 塞进提问，立刻升级或降回——没有
-  菜单、没有设置、不打断心流。
+- 🪄 **Touchless secret-code control.** Slip `dylup` / `dylgo` into the end of your prompt (within the last 30 characters will suffice) to escalate or drop back *instantly* — no menus, no config, no breaking flow.
+- 🪄 **零触碰暗号控制。** 把 `dylup` / `dylgo` 塞进提问 (最后三十个字符以内即可)，立刻升级或降回——没有  菜单、没有设置、不打断心流。
 
 - 🤖 **Auto-pilot.** Scores every reply on objective signals (tool errors, "I cannot"
   failures, hedging, your negative feedback) and escalates when the local model is
