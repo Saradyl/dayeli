@@ -1,0 +1,54 @@
+{
+  "_meta": {
+    "version": 2,
+    "description": "Magic_Hook routing config — local by default, escalate to cloud when performance is poor or the user triggers it. Copy to magic_router_config.json and fill in your own provider names.",
+    "enabled": true
+  },
+
+  "local": {
+    "comment": "Local/base provider name exactly as registered in cc-switch. Used when downgrading.",
+    "primary": "YOUR_LOCAL_PROVIDER_NAME",
+    "backup": null
+  },
+
+  "cloud": {
+    "comment": "Cloud/upgrade provider name exactly as registered in cc-switch. Used when upgrading.",
+    "primary": "YOUR_CLOUD_PROVIDER_NAME",
+    "backup": "YOUR_BACKUP_CLOUD_PROVIDER_NAME"
+  },
+
+  "scoring": {
+    "upgrade_threshold": 7,
+    "hard_upgrade_threshold": 10,
+    "natural_decay_per_turn": 1,
+    "local_success_decay_after_two_turns": 2,
+    "max_consecutive_local_failures": 2,
+    "cooldown_turns_after_cloud": 3
+  },
+
+  "signals": {
+    "tool_error": 5,
+    "user_negative_feedback": 4,
+    "repeat_failure": 3,
+    "low_confidence_wording": 2,
+    "severe_error": 5,
+    "generic_answer": 2
+  },
+
+  "negative_feedback_patterns": [
+    "wrong", "not what I asked", "still broken",
+    "doesn't work", "failed", "incorrect", "error"
+  ],
+
+  "low_confidence_patterns": [
+    "I'm not sure", "I may be wrong", "maybe", "possibly",
+    "I cannot verify", "I think", "might be", "not entirely sure"
+  ],
+
+  "chitchat_patterns": [
+    "^hi$", "^hello$", "^hey$", "^thanks$", "^ok$",
+    "^good morning$", "^good night$", "^go on$", "^okay$"
+  ],
+
+  "debug_logging": false
+}

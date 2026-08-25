@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "version": 2,
+    "description": "Magic Route Proxy — HTTP reverse proxy that hot-reads the routing decision (magic_target.json) on every request. Copy this file to magic_proxy_config.json and fill in your own values.",
+    "enabled": true
+  },
+
+  "activation": {
+    "comment": "The proxy only activates dynamic routing when the request's 'model' matches one of these patterns; otherwise it is a pure pass-through. Put your BASE model's name here (the model Claude Code sends).",
+    "model_patterns": ["YOUR_BASE_MODEL_NAME"],
+    "match_mode": "exact"
+  },
+
+  "base": {
+    "comment": "Base model (local / low-cost) — the default routing target. The proxy rewrites the request 'model' to default_model before forwarding.",
+    "primary": {
+      "name": "my-local-base",
+      "base_url": "http://127.0.0.1:YOUR_LOCAL_PORT/v1",
+      "api_key": "YOUR_LOCAL_API_KEY_HERE",
+      "default_model": "YOUR_BASE_MODEL_NAME"
+    },
+    "backup": null
+  },
+
+  "upgrade": {
+    "comment": "Upgrade model (cloud / strong). Primary first; if it fails, backup is tried; if both fail, the proxy falls back to base so you are never stuck.",
+    "primary": {
+      "name": "my-cloud-upgrade",
+      "base_url": "https://YOUR_CLOUD_ENDPOINT/v1",
+      "api_key": "YOUR_CLOUD_API_KEY_HERE",
+      "default_model": "YOUR_CLOUD_MODEL_NAME"
+    },
+    "backup": {
+      "name": "my-cloud-backup",
+      "base_url": "https://YOUR_BACKUP_ENDPOINT/v1",
+      "api_key": "YOUR_BACKUP_API_KEY_HERE",
+      "default_model": "YOUR_BACKUP_MODEL_NAME"
+    }
+  },
+
+  "routing": {
+    "default_target": "base",
+    "target_file_tmp": "magic_target.json"
+  },
+
+  "scoring": {
+    "upgrade_threshold": 7,
+    "hard_upgrade_threshold": 10,
+    "natural_decay_per_turn": 1,
+    "cooldown_turns_after_cloud": 3,
+    "signals": {
+      "tool_error": 5,
+      "user_negative_feedback": 4,
+      "repeat_failure": 3,
+      "low_confidence_wording": 2,
+      "severe_error": 5
+    },
+    "negative_feedback_patterns": [
+      "wrong", "not what I asked", "still broken", "failed",
+      "incorrect", "doesn't work", "error"
+    ],
+    "low_confidence_patterns": [
+      "I'm not sure", "I may be wrong", "maybe", "possibly",
+      "I cannot verify", "I think", "might be", "not entirely sure"
+    ],
+    "chitchat_patterns": [
+      "^hi$", "^hello$", "^hey$", "^thanks$", "^ok$"
+    ]
+  },
+
+  "audit_log_tmp": "magic_proxy_audit.jsonl"
+}

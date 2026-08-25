@@ -1,0 +1,29 @@
+{
+  "UserPromptSubmit": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python ~/.claude/hooks/magic_submit.py",
+          "shell": "bash",
+          "timeout": 30,
+          "statusMessage": "Magic_Hook: routing local/cloud…"
+        }
+      ]
+    }
+  ],
+  "Stop": [
+    {
+      "hooks": [
+        {
+          "type": "command",
+          "command": "python ~/.claude/hooks/magic_score.py",
+          "shell": "bash",
+          "timeout": 30,
+          "statusMessage": "Magic_Hook: scoring…",
+          "async": true
+        }
+      ]
+    }
+  ]
+}

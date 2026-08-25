@@ -24,6 +24,7 @@ if HOOK_DIR not in sys.path:
     sys.path.insert(0, HOOK_DIR)
 
 import magic_state
+import magic_session
 import magic_router
 
 
@@ -140,6 +141,11 @@ def main():
     if not cfg.get("_meta", {}).get("enabled", True):
         return
 
+    # 激活门（需求#1）：仅专用双copy provider 激活时才打分。
+    # 单copy（常驻本地）或其他云模型不打分、不干预。
+    if not magic_router.magic_active():
+        return
+
     try:
         raw = sys.stdin.buffer.read().decode("utf-8")
     except Exception:
@@ -147,11 +153,17 @@ def main():
 
     turn = parse_hook_input(raw)
 
+    # 会话标识（用于 per-session 隔离；无则退化为全局）
+    session_id = magic_session.resolve_session(turn)
+
     # 无 assistant 内容（异常场景），直接退出
     if not turn.get("assistant"):
         return
 
-    state = magic_state.read_state()
+    if session_id:
+        state = magic_state.read_session_state(session_id)
+    else:
+        state = magic_state.read_state()
 
     # turn_id 去重：防止同一轮被重复计分
     if turn.get("turn_id") == state.get("last_turn_id"):
@@ -190,17 +202,15 @@ def main():
         state["consecutive_local_failures"] >= cfg.get("scoring", {}).get("max_consecutive_local_failures", 2)
     )
 
-    # 判断本轮走的是不是本地
-    if magic_router.is_local_provider(state.get("target_provider", "")):
-        last_route = "local"
-    elif state.get("target_provider", "") == "":
-        # 没 target 信息时，用 current 名判断
-        from magic_router import current_claude_provider_name
-        last_route = "local" if magic_router.is_local_provider(current_claude_provider_name()) else "cloud"
-    else:
+    # 判断本轮走的是不是本地。
+    # v2：provider 全程是专用双copy（不变），路由由 magic_target.json 决定。
+    # 优先看 state 里记录的 target（本轮 submit 写的），否则读当前 magic_target。
+    if state.get("target_provider", "") and not magic_router.is_local_provider(state.get("target_provider", "")):
         last_route = "cloud"
+    else:
+        last_route = magic_router.current_magic_route()
 
-    magic_state.write_state({
+    written = {
         **state,
         "score": new_score,
         "last_turn_id": turn.get("turn_id", ""),
@@ -210,7 +220,11 @@ def main():
         "upgrade_next_turn": need_upgrade,
         "target_provider": state.get("target_provider", ""),
         "last_updated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-    })
+    }
+    if session_id:
+        magic_state.write_session_state(session_id, written)
+    else:
+        magic_state.write_state(written)
 
     # 审计日志（静默）
     audit_path = os.path.join(os.path.dirname(HOOK_DIR), "state", "magic_router_audit.jsonl")
@@ -218,8 +232,9 @@ def main():
         os.makedirs(os.path.dirname(audit_path), exist_ok=True)
         with open(audit_path, "a") as f:
             f.write(json.dumps({
-                "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                "ts": written["last_updated_at"],
                 "turn_id": turn.get("turn_id", ""),
+                "session_id": session_id or "",
                 "route": last_route,
                 "score_before": state.get("score", 0),
                 "score_delta": score,

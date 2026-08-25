@@ -1,323 +1,344 @@
-# Magic_Hook by DYL — 会“精打细算”的 Claude Code 模型路由器
-# Magic_Hook by DYL — the model router that thinks before it spends
+# 🪄 Magic_Hook
+
+### Touchless, user-driven model routing for Claude Code
+### 零触碰、由你做主的 Claude Code 模型路由器
+
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Claude Code](https://img.shields.io/badge/built%20for-Claude%20Code-orange.svg)](https://www.anthropic.com/claude-code)
+[![hooks](https://img.shields.io/badge/hooks-UserPromptSubmit%20%7C%20Stop-purple.svg)]()
+
+> 🆕 **v2 headline: *touchless* model switching.** No menus, no config screens.
+> Just slip a secret code (`dylup` / `dylgo`) into the tail of your prompt and
+> the model changes underneath you — *while you keep typing.*
+> 🆕 **v2 主打：零触碰换模型。** 不用点菜单、不用开设置——把暗号 `dylup` / `dylgo`
+> 往你的提问末尾一塞，模型就在你脚下悄悄换了，**你连键盘都不用离开**。
+
+> **Stop paying frontier-model prices for "what time is it?".** Magic_Hook runs
+> every turn on your cheap local model by default, watches reply quality in real
+> time, and silently escalates to a strong cloud model only when the local one
+> starts to struggle — then drops you back the moment things are normal again.
+> **别再拿旗舰模型的价格去问"现在几点了"。** Magic_Hook 默认用便宜的本地模型跑
+> 每一轮，实时盯着回答质量；只有本地模型快扛不住了，才悄悄升级到云端强模型，
+> 一旦回归正常，又立刻把你降回本地省钱。
 
 ---
 
-> A dynamic, cost-aware model router for Claude Code.
-> 一个会“精打细算”的成本型模型路由器。
+## 🧨 The problem / 痛点
 
-> It runs every prompt on a cheap local model by default, watches the reply
-> quality in real time, and silently escalates to a strong cloud model only
-> when the local one looks like it's going to disappoint you — then drops you
-> back down the moment the conversation returns to normal.
-> 默认用便宜的本地模型跑每个提问，实时盯着回答质量，只有当本地模型“快撑不住”
-> 时才悄悄升级到云端强模型；等对话回到正轨，它立刻把你降回本地。
+You talk to an AI **hundreds of times a day**. Most turns are trivial — *reformat
+this*, *what's in this file*, *try again*. Yet the default setup bills **every
+single one** to the most expensive model, and makes you wait for the slowest model
+on your fastest questions.
 
----
+你一天要跟 AI 对话**几百次**，其中绝大多数都是小事——*改个格式*、*看看这文件*、
+*再试一遍*。可默认配置却把**每一句**都丢给最贵的模型，还让你用最慢的模型去等
+那些最简单的问题。
 
-# 中文简介 — Why you need this
+| | Strong cloud / 云端强模型 | Local / 本地模型 |
+|---|---|---|
+| **Hard-task quality / 难题质量** | ✅ great 强 | ❌ struggles 吃力 |
+| **Speed / 速度** | 🐢 slow 慢 | ⚡ instant 秒回 |
+| **Cost / 成本** | 💸💸💸 贵 | 🆓 nearly free 几乎免费 |
 
-## 一个每个重度 AI 用户都会遇到的痛点
-## The pain every heavy AI user hits
+You want **both**: local for the easy 80%, cloud for the hard 20%. Existing tools
+(`cc-switch`, `Switchyard`, …) can *switch* models — but never decide ***when***.
+**Magic_Hook makes the decision for you.**
 
-一天几百次地跟 AI 对话，几乎每个工具都会把**每一次对话**都交给最贵的模型。
-Every AI workflow means talking to a model **hundreds of times a day** — and
-almost every tool bills **every single turn** to the most expensive model.
-
-可事实是：你的 `「几点了？」「帮我改这段` 和你辛苦憋出来的
-`「把整个 API 重构一下`，花的钱**完全一样**。
-Yet the cost of a *"what time is it?"* and a *"refactor the entire API"*
-comes out **exactly the same**.
-
-- 强模型慢。几十次快速提问里，那点延迟一点点吃掉你的节奏。
-- The strong cloud model is slow — those delays pile up and ruin your flow.
-- 本地模型快、便宜，但“笨”，一遇到难题就卡壳，还没地方逃生。
-- The local model is fast and cheap but dumb — it stumbles on anything hard, with nowhere to escape.
-
-市面上常见做法，要么手动切模型（每个回合都要你操心），要么像
-`cc-switch` / `Switchyard` 这类只能“切换”、却不会“决定何时切换”。
-The usual workarounds force you to either switch manually every turn, or rely
-on tools like `cc-switch` / `Switchyard` that can *switch* models but never
-*decide when*.
-
-> **Magic_Hook 帮你把“决定”这件事做了。** 你只管说话，它负责判断：默认走
-> 便宜本地模型，模型快不行的时**悄悄升级**，聊回正轨后**自动降回**本地。
-> **Magic_Hook removes the decision.** You keep talking. The router decides:
-> local by default, upgraded on demand, dropped automatically.
+你**两个都想要**：80% 的简单活儿给本地，20% 的硬骨头给云端。现有工具
+（`cc-switch`、`Switchyard`……）只会"切换"，却从不判断"**何时该切**"。
+**Magic_Hook 替你做这个决定。**
 
 ---
 
-# 英文简介 — How it works
+## ✨ Features / 特性
 
-## The problem
-## 痛点
+- 🪄 **Touchless secret-code control.** Slip `dylup` / `dylgo` into your prompt to
+  escalate or drop back *instantly* — no menus, no config, no breaking flow.
+- 🪄 **零触碰暗号控制。** 把 `dylup` / `dylgo` 塞进提问，立刻升级或降回——没有
+  菜单、没有设置、不打断心流。
 
-Local models are fast and cheap but they stumble on anything non-trivial, and
-the usual workarounds can *switch* models but never *decide when*.
-本地模型快、便宜，但“笨”，而常见做法只能“切换”、不会“判断时机”。
+- 🤖 **Auto-pilot.** Scores every reply on objective signals (tool errors, "I cannot"
+  failures, hedging, your negative feedback) and escalates when the local model is
+  clearly out of its depth.
+- 🤖 **自动驾驶。** 用客观信号给每轮回答打分（工具报错、"我做不到"、含糊其辞、你的
+  负面反馈），本地模型明显不行时就升级。
 
-## The loop
-## 升降级闭环
+- 💰 **Local-first.** Cheap local model handles the easy majority; you only pay for
+  cloud when it actually matters.
+- 💰 **本地优先。** 便宜的本地模型扛下大多数简单活儿，只在真正需要时才为云端付费。
+
+- 🛡️ **Never stuck.** Primary cloud → backup cloud → auto-fallback to local. A dead
+  endpoint never leaves you hanging.
+- 🛡️ **永不卡死。** 主云挂了试备用云，备用也不行自动退回本地——任何端点失效都不会
+  把你晾在半空。
+
+- 🔄 **Auto cooldown.** After a cloud stint it returns to local automatically.
+- 🔄 **自动冷却。** 云端跑完几轮，自动降回本地，无需手动收拾。
+
+- 🧠 **Context-overflow aware.** If the local model runs out of context, it escalates
+  automatically.
+- 🧠 **上下文溢出感知。** 本地模型上下文不够用时，自动升级。
+
+- 👥 **Multi-session safe.** Pauses auto-switching while several sessions run; your
+  passphrases still work.
+- 👥 **多会话安全。** 多个会话同时跑时暂停自动切换，但你的暗号照样有效。
+
+- 🔌 **Provider-agnostic.** Any local model + any cloud model, wired through
+  [`cc-switch`](https://github.com/farion1231/cc-switch).
+- 🔌 **不挑模型。** 任意本地模型 + 任意云端模型，经
+  [`cc-switch`](https://github.com/farion1231/cc-switch) 接入即可。
+
+---
+
+## 🎮 Touchless control — a secret code in your prompt
+## 🎮 零触碰控制——藏在提问里的暗号
+
+*(the killer feature / 杀手锏)*
+
+Every router makes *you* stop, open a menu, and pick a model. Magic_Hook flips that:
+the smartest signal for "should I switch?" isn't an algorithm — **it's you.** So we
+made switching **touchless**. You never leave the keyboard. You just bury a secret
+code at the end of whatever you were already typing:
+
+所有路由器都要你*停下来*、打开菜单、挑模型。Magic_Hook 反其道而行：判断"该不该切"
+最聪明的信号不是算法——**是你本人**。所以我们把切换做成了**零触碰**：你不用离开键盘，
+只需把暗号埋在你本来就要打的那句话末尾：
+
+| You type / 你输入 | What happens / 发生什么 |
+|---|---|
+| `…any message **dylup**` | ⬆️ Escalate to the cloud model — *this very turn* ⬆️ 立刻升级云端强模型 |
+| `…any message **dylgo**` | ⬇️ Drop back to the local model — *this very turn* ⬇️ 立刻降回本地模型 |
+
+**Why it feels like magic / 为什么它像魔法：**
+
+- 🪄 **Touchless / 零触碰** — no menu, no shortcut. The code rides along in the prompt
+  you were writing anyway. 没有菜单、没有快捷键，暗号就搭在你正在写的那句话上。
+- 🧿 **Secret / 隐蔽** — only the last **30 characters** are scanned, case-insensitive,
+  so ordinary words never trigger it. 只扫描末尾 **30 个字符**、不分大小写，普通措辞
+  绝不会误触发。
+- ⚡ **Instant / 即时** — the model under your *current* reply changes immediately.
+  你*当前*这条回答底下的模型，立刻就换。
+- 🛡️ **Always on / 始终在线** — works even while auto-routing is paused. 即使自动路由
+  被暂停（多会话），暗号依然生效。
+
+The auto-pilot handles the routine; the secret code is your override whenever *you*
+know better.
+
+自动驾驶负责日常，暗号则是"你比算法更懂"时的终极否决权。
+
+---
+
+## 🔁 The loop / 升降级闭环
 
 ```
-        ┌───────────────────────────────────────────────┐
-        │              你继续照常说话                     │
-        │              You keep talking                 │
-        └───────────────┬───────────────────────────────┘
-                        │
-        ┌──────────────────────────────────────────────┐
-        │   UserPromptSubmit 钩子：判断本次走哪条路      │
-        │   hook: decide the route (from last turn score)│
-        └───────────────┬───────────────────────────────┘
-                        │
-        ┌──────────────────────────────────────────────┐
-        │         本轮回答打分（异步，不耽误你）          │
-        │         score the reply (async, zero delay)   │
-        │   工具错误 · 严重失败 · 含糊措辞 · 负反馈      │
-        │   tool errors · severe failures · vague wording│
-        └───────────────┬───────────────────────────────┘
-                        │
-        ┌──────────────────────────────────────────────┐
-        │   分数 < 7  → 便宜本地模型（快、省钱）          │
-        │   score < 7   →  cheap LOCAL model            │
-        │   分数 ≥ 7  →  悄悄升级云端强模型              │
-        │   score ≥ 7   →  escalate to CLOUD model      │
-        │   在云端待够 3 轮 → 冷却后自动降回本地         │
-        │   stayed on 3 turns →  cool down & drop down  │
-        └────────────────────────────────────────────────┘
+            ┌─────────────────────────────────────────┐
+            │      you keep talking … 你继续说话 …      │
+            └──────────────────┬──────────────────────┘
+                               │
+            ┌──────────────────▼──────────────────────┐
+            │  UserPromptSubmit hook                  │
+            │  · passphrase? 暗号?  dylup / dylgo      │
+            │  · else: last turn's score 上一轮得分     │
+            └──────────────────┬──────────────────────┘
+                               │
+            ┌──────────────────▼──────────────────────┐
+            │  Stop hook — score the reply (async)    │
+            │  tool errors · "I cannot" · hedging     │
+            │  报错 · 认怂 · 含糊 · 你的负反馈           │
+            └──────────────────┬──────────────────────┘
+                               │
+        ┌──────────────────────▼──────────────────────┐
+        │  score < threshold → stay LOCAL (cheap/省)  │
+        │  score ≥ threshold → escalate to CLOUD      │
+        │  cloud for N turns → cool down → LOCAL      │
+        └─────────────────────────────────────────────┘
 ```
 
-## What you see
-## 实际体验
+**local → escalate → cool down → return.** Fully automatic — or override it any time
+with a passphrase.
 
-| 你说… You say… | 发生什么 What happens |
-|----------|--------------|
-| *"hi"* | 本地模型秒回。钱省了，速度也够了。 | Local model answers instantly. No cost, no latency. |
-| *"重写这段，报错一直回来，我没法确认…"* | 本地模型栽在工具错误上。分数升高，**下一轮**悄悄切到云端。 | Local model trips over tool errors. Score climbs. Next turn routes to cloud. |
-| *"还是不对啊！"* | 负反馈加码，分数升。留在云端。 | More negative feedback. Score climbs. Stays on cloud. |
-| （云端连答 3 轮都好用） | 冷却结束，**自动拉回本地**，分数清零。 | After cooldown, it **drops you back** to local. Score resets. |
-
-本地 → 升级 → 冷却 → 降回。这就是完整闭环。
-Local → upgrade → cool down → return. That's the full loop.
+**本地 → 升级 → 冷却 → 降回。** 全自动——或者，随时用一个暗号夺回控制权。
 
 ---
 
-# 针对 dgx spark + switchyard 设计，也可用于任何相似场景
+## 🏗️ How it works / 技术原理
 
-## Built for `dgx-spark` + `switchyard`, but not bound to it
+Magic_Hook is a handful of Python scripts on Claude Code's **hook system**, plus a
+tiny **HTTP proxy** that does the per-request routing:
 
-Magic_Hook 最初是为 **`dgx-spark` + `switchyard`**（本地模型路由）这套组合
-量身打造的 —— 它正好解决了 switchyard “能路由、却不判断”的问题。
-Magic_Hook was originally tuned for the **`dgx-spark` + `switchyard`** combo —
-where switchyard can *route* but never *decides when*.
+Magic_Hook 是几个挂在 Claude Code **钩子机制**上的 Python 脚本，外加一个做逐请求
+路由的**迷你 HTTP 代理**：
 
-但它**不绑定任何特定模型或网关**。
-It doesn't lock you into a specific model or gateway.
+| Piece / 组件 | Hook / 角色 | Job / 职责 |
+|---|---|---|
+| `magic_submit.py` | `UserPromptSubmit` | Reads score & passphrases, decides route 读分数与暗号、定路由 |
+| `magic_score.py` | `Stop` (async) | Scores the finished reply 给回答打分 |
+| `magic_proxy.py` | HTTP proxy `:15666` | Hot-reads routing decision per request 逐请求热读路由决策 |
+| `magic_router.py` | library | Activation gate + switching helpers 激活门 + 切换辅助 |
+| `magic_state.py` | library | Per-session state (multi-session safe) 按会话存状态 |
+| `magic_status.py` | CLI | `python magic_status.py` — live status 查看实时状态 |
 
-只要你有一个“便宜本地模型”和一个“云端强模型”，并通过 `cc-switch` 把它们注册
-成带名字的 provider，这套逻辑就能套用。
-As long as you register a cheap local model and a strong cloud model as named
-providers through `cc-switch`, the same loop applies.
+**Activation gate.** Magic_Hook only activates when you select its *dedicated* provider
+in `cc-switch` (the one whose `base_url` points at the proxy on `:15666`). Pick a plain
+local provider and it stays resident-local; pick any cloud provider and Magic_Hook stays
+out of the way entirely.
 
----
+**激活门。** 只有当你在 `cc-switch` 里选中那个*专用* provider（`base_url` 指向 `:15666`
+代理的那个），Magic_Hook 才激活。选普通本地 provider 就常驻本地，选任何云模型它就完全
+不插手。
 
-# 技术版原理 — How it works (technical)
+**Routing, not switching.** Escalating doesn't yank your `cc-switch` provider — it writes
+a one-line decision file (`magic_target.json`) that the proxy reads on every request. Your
+provider never changes mid-session, so nothing breaks.
 
-Magic_Hook 构建在 Claude Code 的 **hook 机制**之上 —— 两个钩子，一个状态文件。
-Magic_Hook is built on **Claude Code's hook system** — two hooks, one state file.
+**是路由，不是切换。** 升级不会去动你的 `cc-switch` provider——它只写一个一行的决策文件
+（`magic_target.json`），代理每个请求热读它。你的 provider 全程不变，所以什么都不崩。
 
-| 钩子 | 触发时机 | 脚本 | 职责 |
-|------|------|------|------|
-| `UserPromptSubmit` | 模型回答前 | `magic_submit.py` | 读上一轮分数；达阈值就切到云端模型。 |
-| `Stop` | 本轮结束后 | `magic_score.py` | 异步重打分并更新状态。完全不影响你的等待。 |
+**Resilience.** Upgrade endpoint errors → try backup cloud → still failing → fall back to
+local. You are never left without a model.
 
-评分信号打分表：
+**韧性。** 升级端点报错 → 试备用云 → 还不行 → 退回本地。你永远不至于无模型可用。
 
-| Signal | 触发 Example | 分值 |
-|--------|--------------|:----:|
-| `tool_error` | `Traceback`、`Error:`、`Permission denied` | 5 |
-| `severe_error` | `I cannot`、`无法`、`做不到` | 5 |
-| `low_confidence` | `maybe`、`不确定`、`也许` | 2 |
-| `user_negative_feedback` | `wrong`、`还是不行`、`错了` | 4 |
-
-状态机：
-
-```
-state {
-  score, last_route, upgrade_next_turn,
-  cloud_cooldown_turns, consecutive_local_failures
-}
-
-on each turn:
-    score   = base_score + signals(...)
-    score  -= natural_decay_per_turn          # 每轮都衰减
-    if route == cloud:
-        score = 0                             # 云端成功就清零
-    if score >= upgrade_threshold:
-        set upgrade_next_turn = True          # 触发升级
-    on upgrade:
-        switch_provider(cloud)
-        cloud_cooldown_turns = 3              # 在云端待几轮
-    on cooldown:
-        cloud_cooldown_turns -= 1
-    if cooldown == 0 and not is_local:
-        switch_provider(local)                # 降回本地
-```
-
-旁边还配了一个 **HTTP 层动态代理**（`magic_proxy.py`），思路完全一致：
-本地为主模型，`context_length` 超限时自动升级，主模型挂了自动试备用。
-A companion **HTTP proxy** (`magic_proxy.py`) applies the same idea at the
-request layer: local primary, auto-escalate on `context_length`, auto-fallback
-if the primary dies.
-
-完整流程、评分表、状态机见 [docs/architecture.md](docs/architecture.md)。
-Full flow, scoring table, and state machine live in
-[docs/architecture.md](docs/architecture.md).
+Full flow, scoring table and state machine: [`docs/architecture.md`](docs/architecture.md).
+完整流程、评分表与状态机见 [`docs/architecture.md`](docs/architecture.md)。
 
 ---
 
-## 🚀 安装 Install
+## 🚀 Quick start / 快速上手
 
-### 1. 把钩子复制到你的 Claude Code 配置
+**0. Prereqs / 前置** — [Claude Code](https://www.anthropic.com/claude-code),
+[`cc-switch`](https://github.com/farion1231/cc-switch), Python 3.10+,
+`aiohttp` (`pip install aiohttp`).
 
-Copy the hook scripts into your Claude Code config:
-
+**1. Copy the hooks / 复制钩子** into your Claude Code hooks folder：
 ```bash
-cp hooks/magic_score.py     ~/.claude/hooks/
-cp hooks/magic_submit.py    ~/.claude/hooks/
-cp hooks/magic_router.py    ~/.claude/hooks/
-cp hooks/magic_state.py     ~/.claude/hooks/
+cp hooks/magic_submit.py hooks/magic_score.py hooks/magic_router.py \
+   hooks/magic_state.py hooks/magic_session.py hooks/magic_status.py \
+   ~/.claude/hooks/
 
-# 可选：每请求的 HTTP 代理 (optional per-request HTTP proxy)
-cp hooks/magic_proxy.py         ~/.claude/hooks/
-cp hooks/magic_proxy_cli.py     ~/.claude/hooks/
-cp config/magic_proxy_config.json  ~/.claude/
+# optional per-request proxy / 可选的逐请求代理
+cp hooks/magic_proxy.py hooks/magic_proxy_cli.py ~/.claude/hooks/
 ```
 
-### 2. 注册钩子 Register the hooks
-
-把下面内容加进你的**用户级** `~/.claude/settings.json`（顶层，跟
-`"tools"`、`"env"` 同级）：
-
-Add this to your **user-level** `~/.claude/settings.json` (top level, alongside
-`"tools"`, `"env"` …):
-
+**2. Register the hooks / 注册钩子** in your user-level `~/.claude/settings.json`：
 ```jsonc
 {
   "hooks": {
     "UserPromptSubmit": [
-      { "command": "python ~/.claude/hooks/magic_submit.py",
-        "statusMessage": "动态路由：评估本地/云端模型…",
-        "timeout": 30, "type": "command" }
+      { "hooks": [ { "type": "command",
+          "command": "python ~/.claude/hooks/magic_submit.py",
+          "timeout": 30 } ] }
     ],
     "Stop": [
-      { "command": "python ~/.claude/hooks/magic_score.py",
-        "statusMessage": "异步评分中…",
-        "async": true, "timeout": 30, "type": "command" }
+      { "hooks": [ { "type": "command",
+          "command": "python ~/.claude/hooks/magic_score.py",
+          "async": true, "timeout": 30 } ] }
     ]
   }
 }
 ```
 
-### 3. 给你的 provider 命名 Name your providers
+**3. Create a dedicated provider / 建一个专用 provider** in `cc-switch`：
+- name it anything (e.g. `my-local-model-dynamic`)，
+- set its `base_url` to `http://127.0.0.1:15666/v1`，
+- then set `MAGIC_DEDICATED_PROVIDER` in `magic_router.py` to that exact name.
+- 名字随意（比如 `my-local-model-dynamic`），`base_url` 填 `http://127.0.0.1:15666/v1`，
+  再把 `magic_router.py` 里的 `MAGIC_DEDICATED_PROVIDER` 改成这个确切的名字。
 
-`magic_score.py` 读的是 **provider 名字**（不是 key）。
-`magic_score.py` reads **provider names** (not keys).
-
-在 `cc-switch` 里按你想用的名字注册，然后写进 `magic_router_config.json`：
-Register them in your `cc-switch` UI, then set them in
-`magic_router_config.json`:
-
-```jsonc
-{
-  "local":  { "primary": "switchyard-smart-spark" },
-  "cloud":  { "primary": "OpenRouter",
-              "backup": "Aliyun-backup" }
-}
-```
-
-### 4. 配置代理（可选） Configure the proxy (optional)
-
-复制示例，填你自己的值。 Copy the example, fill in your own values:
-
+**4. Configure models / 配置模型.** Copy the examples, fill in your own endpoints/keys：
 ```bash
-cp .env.example .env        # 真实密钥/URL 放这里（别提交）
-cp .env.example .env        # your real keys/URLs live here (do not commit)
-# 然后编辑 .env
-# then edit .env
+cp config/magic_proxy_config.example.json  hooks/magic_proxy_config.json
+cp config/magic_router_config.example.json hooks/magic_router_config.json
 ```
 
-> 🔒 **你的密钥永远留在本机。** 脚本从 `cc-switch` 读 provider 名字、从你自己的
-> `.env` 读密钥。不会上传任何东西。
-> 🔒 **Your secrets never leave your machine.** The scripts read provider names
-> from `cc-switch` and keys from your own `.env`. Nothing is uploaded.
+**5. Start the proxy / 启动代理** and go：
+```bash
+python ~/.claude/hooks/magic_proxy.py &
+```
 
-## ✅ Quick check
-
+**6. Verify / 验证**：
 ```bash
 python ~/.claude/hooks/magic_status.py
 ```
+Then select your dedicated provider and type a message ending in `dylup`.
+然后选中你的专用 provider，发一条以 `dylup` 结尾的消息。
 
-`Config / State / Audit: True` 就说明装好了。用几句
-*"I can't verify this, it might be wrong, error: Permission denied"*
-把分推到 7 分，然后观察 `last_route` 变成 `cloud`。
-`Config / State / Audit: True` means it's wired up. Trigger a real escalation
-loop with a few turns of *"I can't verify this, it might be wrong"* until the
-score hits 7 — then watch `last_route` flip to `cloud`.
+> 🔒 **Your keys never leave your machine.** Real config files are git-ignored; only
+> `.example.json` templates are committed.
+> 🔒 **你的密钥永远不出本机。** 真实配置被 git 忽略，只有 `.example.json` 模板入库。
 
-## ⚙️ 调参 Tuning
+---
 
-所有开关都在 [magic_router_config.json](config/magic_router_config.json)：
-All knobs live in [magic_router_config.json](config/magic_router_config.json):
+## ⚙️ Tuning / 调参
 
-| 设置项 | 作用 |
-|---------|------|
-| `scoring.upgrade_threshold` | 触发升级所需分数（默认 **7**） |
-| `scoring.natural_decay_per_turn` | 每轮扣除的分数 |
-| `scoring.max_consecutive_local_failures` | 连续失败强制升级次数（默认 **2**） |
-| `scoring.cooldown_turns_after_cloud` | 降回本地前在云端待几轮（默认 **3**） |
-| `signals.*` | 各信号权重 — 调大可让模型更早升级 |
-| `*_patterns` | 触发各信号的关键词 — 按你的风格改 |
+All knobs live in `magic_router_config.json` / `magic_proxy_config.json`：
 
-## 🗂️ Layout
+| Setting / 设置 | Meaning / 含义 |
+|---|---|
+| `scoring.upgrade_threshold` | Score that triggers auto-escalation 触发升级的分数（默认 **7**） |
+| `scoring.cooldown_turns_after_cloud` | Cloud turns before dropping back 降回前在云端待几轮（默认 **3**） |
+| `scoring.max_consecutive_local_failures` | Forced escalation after N failed local turns 连续失败几次强制升级（默认 **2**） |
+| `signals.*` | Weight of each scoring signal 各信号权重 |
+| `upgrade.primary` / `upgrade.backup` | Your cloud models; backup tried if primary fails 主云/备用云 |
+
+---
+
+## 🗂️ Layout / 目录
 
 ```
-magic-hook-github/
-├── README.md            # you are here
-├── LICENSE              # MIT
-├── .env.example         # your secrets live here (do not commit)
-├── .gitignore
-├── hooks/               # the 7 hook scripts
-├── config/              # placeholder config templates
-└── docs/architecture.md # full flow + scoring + state machine
+magic-hook/
+├── README.md
+├── LICENSE                        # MIT
+├── hooks/
+│   ├── magic_submit.py            # UserPromptSubmit hook
+│   ├── magic_score.py             # Stop hook (async scoring)
+│   ├── magic_proxy.py             # HTTP routing proxy (:15666)
+│   ├── magic_router.py            # activation gate + helpers
+│   ├── magic_state.py             # per-session state
+│   ├── magic_session.py           # session helpers
+│   ├── magic_status.py            # diagnostic CLI
+│   └── def.json                   # hook definitions
+├── config/
+│   ├── magic_proxy_config.example.json
+│   └── magic_router_config.example.json
+└── docs/architecture.md
 ```
 
 ---
 
-# 适合谁 Who this is for
+## 🙋 Who is this for? / 适合谁
 
-- 🧑‍💻 **重度 AI 用户** —— 想省钱、想快，又不想在质量上妥协。
-- 🏢 **团队 & 机构** —— 给固定预算跑批量任务，需要一个“不会爆表”的成本控制层。
-- 🔧 **折腾本地模型的人** —— 手上有 dgx-spark / vLLM / Switchyard 之类本地网关。
+- 🧑‍💻 **Heavy Claude Code users** who want speed + savings without giving up quality.
+- 🧑‍💻 **重度 Claude Code 用户**——既要快、又要省，还不肯牺牲质量。
+- 🏢 **Teams on a budget** running lots of agentic turns and need a cost ceiling.
+- 🏢 **预算有限的团队**——大量 agent 调用，需要一个不会爆表的成本上限。
+- 🔧 **Local-model tinkerers** with DGX Spark / vLLM / Ollama / LM Studio who want an
+  escape hatch to the cloud when it counts.
+- 🔧 **本地模型玩家**——手上跑着 DGX Spark / vLLM / Ollama / LM Studio，想要一个
+  关键时刻能逃去云端的舱门。
 
-- 🧑‍💻 **Heavy AI users** — save cost, keep speed, don't compromise on quality.
-- 🏢 **Teams & orgs** — batch jobs on a fixed budget, need a cost ceiling that never blows up.
-- 🔧 **Local model tinkerers** — running dgx-spark / vLLM / Switchyard or similar gateways.
-
-## 一句话总结
-
-> 本地模型负责“快”，云端模型负责“强”，**Magic_Hook 负责在两者之间做那个不用你操心的决定**。
-> The local model is *fast*, the cloud model is *strong* — **Magic_Hook makes the
-> decision you don't have to.**
+> The local model is *fast*, the cloud model is *strong* — **Magic_Hook decides which
+> one you need, so you don't have to.**
+> 本地模型负责*快*，云端模型负责*强*——**Magic_Hook 负责判断此刻该用谁，让你什么都不
+> 用管。**
 
 ---
 
-## 🤝 Credits
+## 🗺️ Roadmap / 路线图
 
-Built by the DYL team. Inspired by the gap in `cc-switch` and `Switchyard`:
-**they can switch models, but they don't decide *when*.** Magic_Hook adds the
-decision, silently, based on reply quality.
+- [ ] Retry-loop detection 重试循环检测（最强的"该升级"信号）
+- [ ] Repeated-resubmission detection 重复提交检测（"模型没听懂"）
+- [ ] Web UI for live route/score status 实时路由/分数可视化面板
+- [ ] More scoring signals 更多评分信号（忠实度、工具遥测）
 
-## 📜 License
+## 🤝 Contributing / 参与贡献
+
+Issues and PRs welcome. If Magic_Hook saves you money, **drop a ⭐** — it helps more
+people find it.
+
+欢迎 Issue 和 PR。如果 Magic_Hook 帮你省了钱，**点个 ⭐**——让更多人看到它。
+
+## 📜 License / 许可
 
 MIT — see [LICENSE](LICENSE).

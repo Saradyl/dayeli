@@ -11,6 +11,7 @@ import json
 import os
 import sqlite3
 import time
+import tempfile
 
 CC_SWITCH_DIR = os.path.expanduser("~/.cc-switch")
 CC_SWITCH_SETTINGS = os.path.join(CC_SWITCH_DIR, "settings.json")
@@ -103,8 +104,104 @@ def set_claude_provider(name):
 
 
 def is_local_provider(name):
-    """启发式判断：含 local/switchyard-smart-spark copy 等视为本地。"""
+    """Heuristic: does this provider name look like a local/low-cost model?
+
+    Adjust the markers to match your own local provider naming.
+    """
     if not name:
         return False
-    local_markers = ["local", "switchyard-smart-spark copy", "ornith"]
+    local_markers = ["local", "my-local-model"]
     return any(m in name.lower() for m in local_markers)
+
+
+# ===================================================================
+# Magic_Hook v2 — activation gate + magic_target.json routing
+#
+# Mechanism: a dedicated cc-switch provider points its base_url at the
+# magic proxy (default 127.0.0.1:15666). Up/downgrading does NOT switch
+# the cc-switch provider; instead it writes magic_target.json in the temp
+# dir, which the proxy hot-reads on every request to pick base/upgrade.
+# This keeps the cc-switch provider constant, so the activation gate
+# stays consistent.
+# ===================================================================
+
+# The dedicated provider that activates Magic_Hook. CHANGE THIS to the name
+# of the cc-switch provider whose base_url points at the magic proxy (15666).
+MAGIC_DEDICATED_PROVIDER = "my-local-model-dynamic"
+# The magic proxy port. The dedicated provider's base_url points at 127.0.0.1:15666.
+MAGIC_PROXY_PORT = "15666"
+# Routing-decision file shared with magic_proxy.py / magic_proxy_cli.py
+MAGIC_TARGET_FILE = os.path.join(tempfile.gettempdir(), "magic_target.json")
+
+
+def is_magic_dedicated(name):
+    """Exact-match the dedicated provider.
+
+    MUST be exact match (not substring). Substring matching would confuse a
+    resident-local provider with the dedicated dynamic one.
+    """
+    return (name or "").strip() == MAGIC_DEDICATED_PROVIDER
+
+
+def magic_active():
+    """Is Magic_Hook active? = has the user selected the dedicated provider?
+
+    IMPORTANT: do NOT judge by ANTHROPIC_BASE_URL. If you use cc-switch's
+    local hot-switch routing proxy, the base_url is always that proxy's port
+    and never reveals the backend. The reliable signal is the currently
+    selected cc-switch provider NAME:
+      - == dedicated provider -> traffic goes through the magic proxy -> active
+      - any other provider    -> not through the magic proxy           -> inactive
+    """
+    try:
+        return is_magic_dedicated(current_claude_provider_name())
+    except Exception:
+        return False
+
+
+def current_base_url():
+    """Read ANTHROPIC_BASE_URL from ~/.claude/settings.json env.
+
+    Note: if you run cc-switch's local hot-switch routing proxy, this value
+    is always that proxy's port and cannot be used to detect activation;
+    it is for diagnostics only.
+    """
+    try:
+        settings_path = os.path.expanduser("~/.claude/settings.json")
+        with open(settings_path, encoding="utf-8") as f:
+            s = json.load(f)
+        return (s.get("env", {}) or {}).get("ANTHROPIC_BASE_URL", "")
+    except Exception:
+        return ""
+
+
+def read_magic_target():
+    """读 magic_target.json，返回 'base'/'upgrade'；缺失或异常默认 'base'。"""
+    try:
+        if os.path.exists(MAGIC_TARGET_FILE):
+            with open(MAGIC_TARGET_FILE, encoding="utf-8") as f:
+                d = json.load(f)
+            v = d.get("target", "base")
+            if v in ("base", "upgrade"):
+                return v
+    except Exception:
+        pass
+    return "base"
+
+
+def write_magic_target(target, reason=""):
+    """写 magic_target.json，让 15666 代理按此路由。成功返回 True。"""
+    if target not in ("base", "upgrade"):
+        return False
+    try:
+        with open(MAGIC_TARGET_FILE, "w", encoding="utf-8") as f:
+            json.dump({"target": target, "reason": reason,
+                       "updated_at": time.time()}, f)
+        return True
+    except Exception:
+        return False
+
+
+def current_magic_route():
+    """当前 magic_target 对应的路由：'local'(base) / 'cloud'(upgrade)。"""
+    return "local" if read_magic_target() == "base" else "cloud"

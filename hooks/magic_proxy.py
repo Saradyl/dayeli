@@ -20,8 +20,6 @@ from aiohttp import web, ClientSession, ClientTimeout
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "magic_proxy_config.json")
 _TD = tempfile.gettempdir()
 TARGET_FILE = os.path.join(_TD, "magic_target.json")
-# Proxy listen port (change to your own). Local loopback address is fine.
-PROXY_PORT = int(os.environ.get("MAGIC_PROXY_PORT", "15666"))
 
 _CLIENT = None
 
@@ -95,6 +93,27 @@ def extract_model(body_bytes):
     return ""
 
 
+def rewrite_model(body_bytes, provider):
+    """Rewrite the request body's 'model' to this provider's default_model.
+
+    Required: base uses the local model ID, upgrade uses the cloud model ID.
+    Without rewriting, sending the local model ID to the cloud endpoint is
+    rejected ("not a valid model ID"). If the provider has no default_model,
+    the body is returned unchanged.
+    """
+    default_model = provider.get("default_model", "")
+    if not default_model or not body_bytes:
+        return body_bytes
+    try:
+        d = json.loads(body_bytes)
+        if isinstance(d, dict) and d.get("model", "") != default_model:
+            d["model"] = default_model
+            return json.dumps(d, ensure_ascii=False).encode("utf-8")
+    except Exception:
+        pass
+    return body_bytes
+
+
 def _stream_headers(headers):
     """Ensure headers look SSE/streamable to the downstream client."""
     headers.setdefault("Content-Type", "text/event-stream")
@@ -126,8 +145,10 @@ async def _upstream_request(provider, method, url, body_bytes):
     if ak:
         uh["x-api-key"] = ak
         uh["Authorization"] = f"Bearer {ak}"
-    # switchyard (and other backends) require Content-Type: application/json
+    # Some backends require Content-Type: application/json
     uh.setdefault("Content-Type", "application/json")
+    # 按该 provider 的 default_model 改写请求里的 model（必需）
+    body_bytes = rewrite_model(body_bytes, provider)
     return await call_upstream(method, url, uh, body_bytes)
 
 
@@ -181,11 +202,44 @@ async def handle_request(request):
             return await _serve(out, request, upgrade, body_bytes,
                                 backup=upgrade_bak, first=first_chunk)
 
+        # 升级目标返回错误（云端不通/被拒/限流等）：先试备用云，没备用才退本地。
+        if target == "upgrade" and status >= 400:
+            if backup:
+                print(f"[MagicProxy] upgrade status={status}，试备用云 {backup.get('name','?')}", flush=True)
+                out = await _stream_response(request, {})
+                return await _serve(out, request, backup, body_bytes)
+            print(f"[MagicProxy] upgrade status={status} 且无备用云，退回本地 base", flush=True)
+            try:
+                with open(TARGET_FILE, "w", encoding="utf-8") as f:
+                    json.dump({"target": "base", "updated_at": time.time(),
+                               "reason": "upgrade_failed_fallback"}, f)
+            except Exception:
+                pass
+            base_provider = cfg.get("base", {}).get("primary", {})
+            out = await _stream_response(request, {})
+            return await _serve(out, request, base_provider, body_bytes)
+
         out = await _stream_response(request, resp_headers)
         return await _serve(out, request, provider, body_bytes, first=first_chunk)
 
     except Exception as e:
         print(f"[MagicProxy] Primary {provider.get('name','?')} failed: {e}", flush=True)
+        # 升级目标连接异常（云端不可达）：先试备用云，没备用才退本地。
+        if target == "upgrade":
+            if backup:
+                print(f"[MagicProxy] upgrade 连接异常，试备用云 {backup.get('name','?')}", flush=True)
+                out = await _stream_response(request, {})
+                return await _serve(out, request, backup, body_bytes)
+            print("[MagicProxy] upgrade 连接异常且无备用云，退回本地 base", flush=True)
+            try:
+                with open(TARGET_FILE, "w", encoding="utf-8") as f:
+                    json.dump({"target": "base", "updated_at": time.time(),
+                               "reason": "upgrade_unreachable_fallback"}, f)
+            except Exception:
+                pass
+            base_provider = cfg.get("base", {}).get("primary", {})
+            out = await _stream_response(request, {})
+            return await _serve(out, request, base_provider, body_bytes)
         if backup:
             out = await _stream_response(request, {})
             return await _serve(out, request, backup, body_bytes)
@@ -285,12 +339,12 @@ async def start_proxy():
 
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "127.0.0.1", PROXY_PORT)
+    site = web.TCPSite(runner, "127.0.0.1", 15666)
     await site.start()
     cfg = load_config()
     cname = cfg.get("base", {}).get("primary", {}).get("name", "?")
     patterns = cfg.get("activation", {}).get("model_patterns", ["*"])
-    print(f"[MagicProxy] started on 127.0.0.1:{PROXY_PORT}", flush=True)
+    print(f"[MagicProxy] started on 127.0.0.1:15666", flush=True)
     print(f"[MagicProxy] base: {cname}, activation patterns: {patterns}", flush=True)
 
     await asyncio.Event().wait()
