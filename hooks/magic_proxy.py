@@ -49,10 +49,32 @@ def read_target():
     return tgt
 
 
-def get_provider(target):
+def read_target_level():
+    """读 upgrade 层级（1=主云模型，2=备用云模型）；缺失或异常默认 1。"""
+    try:
+        if os.path.exists(TARGET_FILE):
+            with open(TARGET_FILE, encoding="utf-8") as f:
+                d = json.load(f)
+            lvl = d.get("level", 1)
+            if lvl in (1, 2):
+                return lvl
+    except Exception:
+        pass
+    return 1
+
+
+def get_provider(target, level=1):
     cfg = load_config()
     section = cfg.get("base" if target == "base" else "upgrade", {})
-    return section.get("primary") or {}, section.get("backup")
+    p = section.get("primary") or {}
+    b = section.get("backup")
+    if target == "upgrade" and level >= 2:
+        # level 2 → 互换主备：用 backup 作为 primary，primary 作为备用
+        if b:
+            return b, p
+        # 没有 backup 时退回到 primary
+        return p, None
+    return p, b
 
 
 def build_url(provider, request_path):

@@ -189,13 +189,33 @@ def read_magic_target():
     return "base"
 
 
-def write_magic_target(target, reason=""):
-    """写 magic_target.json，让 15666 代理按此路由。成功返回 True。"""
+def read_magic_target_level():
+    """读 upgrade 层级（1=云模型1/主，2=云模型2/备）；缺失或异常默认 1。
+
+    仅当 target=upgrade 时有意义。"""
+    try:
+        if os.path.exists(MAGIC_TARGET_FILE):
+            with open(MAGIC_TARGET_FILE, encoding="utf-8") as f:
+                d = json.load(f)
+            lvl = d.get("level", 1)
+            if lvl in (1, 2):
+                return lvl
+    except Exception:
+        pass
+    return 1
+
+
+def write_magic_target(target, reason="", level=1):
+    """写 magic_target.json，让 15666 代理按此路由。成功返回 True。
+
+    level 只在 target=upgrade 时有意义（1=主云端，2=备用云端）。
+    """
     if target not in ("base", "upgrade"):
         return False
     try:
         with open(MAGIC_TARGET_FILE, "w", encoding="utf-8") as f:
             json.dump({"target": target, "reason": reason,
+                       "level": 2 if level >= 2 else 1,
                        "updated_at": time.time()}, f)
         return True
     except Exception:

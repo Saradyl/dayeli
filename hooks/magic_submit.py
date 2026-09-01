@@ -24,8 +24,10 @@ from magic_router import (
     magic_active,
     write_magic_target,
     read_magic_target,
+    read_magic_target_level,
     current_magic_route,
 )
+from magic_gui.magic_notify import notify_status
 
 CONFIG_PATH = os.path.join(HOOK_DIR, "magic_router_config.json")
 STATE_DIR = os.path.join(HOOK_DIR, "..", "state")
@@ -35,11 +37,12 @@ AUDIT_PATH = os.path.join(STATE_DIR, "magic_router_audit.jsonl")
 PASSPHRASE_WINDOW = 30
 PASSPHRASE_UP = "dylup"
 PASSPHRASE_DOWN = "dylgo"
+PASSPHRASE_WH = "dylwh"
 UPGRADE_ON_USER_TRIGGER = 7
 
 
 def detect_passphrase(prompt):
-    """只检测 prompt 最后 30 个字符里的暗号，返回 "up"/"go"/None。
+    """只检测 prompt 最后 30 个字符里的暗号，返回 "up"/"go"/"wh"/None。
 
     只看尾部是为了避免 prompt 正文里出现的普通词被误中；
     不区分大小写。
@@ -49,6 +52,8 @@ def detect_passphrase(prompt):
         return "up"
     if PASSPHRASE_DOWN in tail:
         return "go"
+    if PASSPHRASE_WH in tail:
+        return "wh"
     return None
 
 
@@ -157,18 +162,23 @@ def main():
     if not cfg.get("_meta", {}).get("enabled", True):
         return
 
-    # ── 激活门（需求#1）：仅当用户在 cc-switch 选了 magic_hook 专用双copy
-    #    provider（指向 15666 代理）才激活。单copy（常驻本地）或其他云模型
-    #    一律不干预。 ──
-    if not magic_active():
-        return
-
     try:
         raw = sys.stdin.buffer.read().decode("utf-8")
     except Exception:
         raw = sys.stdin.read()
 
     turn = parse_hook_input(raw)
+
+    # ── dylwh：只读状态弹窗，与激活与否无关，先于激活门处理 ──
+    if detect_passphrase(turn.get("user_prompt", "")) == "wh":
+        notify_status()
+        return
+
+    # ── 激活门（需求#1）：仅当用户在 cc-switch 选了 magic_hook 专用双copy
+    #    provider（指向 15666 代理）才激活。单copy（常驻本地）或其他云模型
+    #    一律不干预。 ──
+    if not magic_active():
+        return
 
     # 会话标识（用于多会话隔离）
     session_id = magic_session.resolve_session(turn)
@@ -186,8 +196,17 @@ def main():
 
     # ── 用户暗号（prompt 最后 30 字符）：优先级最高，先处理 ──
     if phrase == "go":
-        # 用户主动降级：积分清零、关升级标志、清冷却，立即路由回本地。
-        # 用户降级意图优先于自动冷却，且不受多会话暂停影响。
+        # 用户主动降级：积分清零、关升级标志、清冷却，路由回本地。
+        if current_is_local:
+            # 已在本地，模型不变，弹状态标签提示
+            print("[MagicHook] 用户降级暗号命中，但已是本地模型", flush=True)
+            notify_status()
+            write_router_state(turn, {
+                **state, "score": 0, "upgrade_next_turn": False,
+                "cloud_cooldown_turns": 0, "last_route": "local",
+            }, action="user_downgrade_idle", extra={"trigger": "dylgo", "note": "already_local"})
+            return
+
         success = write_magic_target("base", reason="user_passphrase_dylgo")
         if success:
             print("[MagicHook] 用户降级暗号命中，已路由回本地模型", flush=True)
@@ -195,35 +214,47 @@ def main():
             print("[MagicHook] 用户降级：写路由决策失败", flush=True)
 
         write_router_state(turn, {
-            **state,
-            "score": 0,
-            "upgrade_next_turn": False,
-            "target_provider": "",
-            "cloud_cooldown_turns": 0,
-            "last_route": "local",
+            **state, "score": 0, "upgrade_next_turn": False,
+            "target_provider": "", "cloud_cooldown_turns": 0, "last_route": "local",
         }, action="user_downgrade", extra={"trigger": "dylgo", "target": "base"})
+        notify_status()
         return
 
     if phrase == "up":
-        # 用户明确指示升级：强制走云端，与打分阈值无关。
-        # 积分 +UPGRADE_ON_USER_TRIGGER，日志标记为 user-triggered。
-        # 不受多会话暂停影响。
+        current_level = read_magic_target_level()
         new_score = state.get("score", 0) + UPGRADE_ON_USER_TRIGGER
-        success = write_magic_target("upgrade", reason="user_passphrase_dylup")
+
+        if current_is_local:
+            # 本地 → 云1（level=1）
+            success = write_magic_target("upgrade", reason="user_passphrase_dylup", level=1)
+            target_label = "cloud_1"
+            route = "cloud"
+        elif current_level == 1:
+            # 云1 → 云2（level=2）
+            success = write_magic_target("upgrade", reason="user_passphrase_dylup", level=2)
+            target_label = "cloud_2"
+            route = "cloud"
+        else:
+            # 已在云2（level=2），模型不变，弹状态标签提示
+            print("[MagicHook] 用户升级暗号命中，但已是最高级云端模型", flush=True)
+            notify_status()
+            write_router_state(turn, {
+                **state, "score": new_score, "upgrade_next_turn": True,
+                "last_route": "cloud",
+            }, action="user_upscale_idle", extra={"trigger": "dylup", "note": "already_max_level"})
+            return
 
         write_router_state(turn, {
-            **state,
-            "score": new_score,
-            "upgrade_next_turn": True,       # 强制下轮升级
+            **state, "score": new_score, "upgrade_next_turn": True,
             "target_provider": cfg.get("cloud", {}).get("primary", ""),
-            # 与自动升级路径一致：进入冷却
             "cloud_cooldown_turns": cfg.get("scoring", {}).get(
                 "cooldown_turns_after_cloud", 0),
-            "last_route": "cloud" if success else state.get("last_route", "local"),
+            "last_route": route,
         }, action="user_upscale", extra={"trigger": "dylup",
-                     "target": "upgrade", "score_after": new_score})
+             "target": target_label, "score_after": new_score})
         if not success:
             print("[MagicHook] 用户升级暗号命中，但写路由决策失败", flush=True)
+        notify_status()
         return
 
     # ── 自动路由（打分驱动，无暗号）：多会话自动暂停 ──
