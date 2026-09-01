@@ -56,6 +56,12 @@ You want **both**: local for the easy 80%, cloud for the hard 20%. Existing tool
 - 🪄 **Touchless secret-code control.** Slip `dylup` / `dylgo` into the end of your prompt (within the last 30 characters will suffice) to escalate or drop back *instantly* — no menus, no config, no breaking flow.
 - 🪄 **零触碰暗号控制。** 把 `dylup` / `dylgo` 塞进提问 (最后三十个字符以内即可)，立刻升级或降回——没有  菜单、没有设置、不打断心流。
 
+- 🔍 **Peek anytime, no model switch.** Toss `dylwh` into any prompt to pop a little yellow sticky note that tells you exactly where you are right now — which model is driving, whether Magic_Hook is active. Fully read-only: it never touches routing, it just *shows* you.
+- 🔍 **随时一眼看状态。** 任何提问里塞一句 `dylwh`，就会弹出一张黄色便签，告诉你现在是谁在跑、Magic_Hook 激活与否——纯只读，绝不改路由，只把状态摆到你眼前。
+
+- ☁️ **Two-tier cloud.** Upgrade is a staircase, not a cliff: `local → Cloud-1 (primary) → Cloud-2 (backup)`. `dylup` walks up one step at a time so a weak local model and a strong cloud can both live side by side.
+- ☁️ **双云阶梯。** 升级不是纵身一跃，而是阶梯：`本地 → 云-1(主) → 云-2(备)`。`dylup` 一步步往上走，让弱本地模型和强云端模型各司其职。
+
 - 🤖 **Auto-pilot.** Scores every reply on objective signals (tool errors, "I cannot"
   failures, hedging, your negative feedback) and escalates when the local model is
   clearly out of its depth.
@@ -107,6 +113,7 @@ code at the end of whatever you were already typing:
 |---|---|
 | `…any message **dylup**` | ⬆️ Escalate to the cloud model — *this very turn* ⬆️ 立刻升级云端强模型 |
 | `…any message **dylgo**` | ⬇️ Drop back to the local model — *this very turn* ⬇️ 立刻降回本地模型 |
+| `…any message **dylwh**` | 🔍 Pop a yellow sticky note showing your current model & status — no switch at all 🔍 弹一张黄色便签,显示当前模型与状态——完全不切模型 |
 
 **Why it feels like magic / 为什么它像魔法：**
 
