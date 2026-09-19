@@ -1,0 +1,284 @@
+{
+ "name": "v3_naive_s2024",
+ "adapter": "data/adapter_v3_naive_s2024",
+ "mode": "recovery",
+ "agg": {
+  "bad_shared": 0.531,
+  "gold": 0.667,
+  "corrupt": 0.7,
+  "delta_bad_gold": 0.136,
+  "wall_s": 303
+ },
+ "cases": [
+  {
+   "tag": "bad_shared",
+   "q": "Natalia sold clips to 48 of her friends in April, and then s",
+   "gold": "72",
+   "prefix_head": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natali",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Natalia sold clips to 48 of her friends in April, and then s",
+   "gold": "72",
+   "prefix_head": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natali",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Natalia sold clips to 48 of her friends in April, and then s",
+   "gold": "72",
+   "prefix_head": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natali",
+   "scores": [
+    0,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Natalia sold clips to 48 of her friends in April, and then s",
+   "gold": "72",
+   "prefix_head": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natali",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Weng earns $12 an hour for babysitting. Yesterday, she just ",
+   "gold": "10",
+   "prefix_head": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $4",
+   "scores": [
+    0,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Weng earns $12 an hour for babysitting. Yesterday, she just ",
+   "gold": "10",
+   "prefix_head": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $4",
+   "scores": [
+    0,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Weng earns $12 an hour for babysitting. Yesterday, she just ",
+   "gold": "10",
+   "prefix_head": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $6",
+   "scores": [
+    0,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Weng earns $12 an hour for babysitting. Yesterday, she just ",
+   "gold": "10",
+   "prefix_head": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $2",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Betty is saving money for a new wallet which costs $100. Bet",
+   "gold": "5",
+   "prefix_head": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided",
+   "scores": [
+    0,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Betty is saving money for a new wallet which costs $100. Bet",
+   "gold": "5",
+   "prefix_head": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided",
+   "scores": [
+    0,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Betty is saving money for a new wallet which costs $100. Bet",
+   "gold": "5",
+   "prefix_head": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Betty is saving money for a new wallet which costs $100. Bet",
+   "gold": "5",
+   "prefix_head": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Julie is reading a 120-page book. Yesterday, she was able to",
+   "gold": "42",
+   "prefix_head": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as ye",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Julie is reading a 120-page book. Yesterday, she was able to",
+   "gold": "42",
+   "prefix_head": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as ye",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Julie is reading a 120-page book. Yesterday, she was able to",
+   "gold": "42",
+   "prefix_head": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as ye",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "bad_shared",
+   "q": "Julie is reading a 120-page book. Yesterday, she was able to",
+   "gold": "42",
+   "prefix_head": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as ye",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "gold",
+   "q": "Mary does her grocery shopping on Saturday. She does her sho",
+   "gold": "62",
+   "prefix_head": "Mary does her grocery shopping on Saturday. She does her shopping only at a specific store where she is allowed a credit",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "corrupt",
+   "q": "Mary does her grocery shopping on Saturday. She does her sho",
+   "gold": "62",
+   "prefix_head": "Mary does her grocery shopping on Saturday. She does her shopping only at a specific store where she is allowed a credit",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "gold",
+   "q": "Ralph is going to practice playing tennis with a tennis ball",
+   "gold": "110",
+   "prefix_head": "Ralph is going to practice playing tennis with a tennis ball machine that shoots out tennis balls for Ralph to hit. He l",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "corrupt",
+   "q": "Ralph is going to practice playing tennis with a tennis ball",
+   "gold": "110",
+   "prefix_head": "Ralph is going to practice playing tennis with a tennis ball machine that shoots out tennis balls for Ralph to hit. He l",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "gold",
+   "q": "Jack is stranded on a desert island. He wants some salt to s",
+   "gold": "400",
+   "prefix_head": "Jack is stranded on a desert island. He wants some salt to season his fish. He collects 2 liters of seawater in an old b",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "gold",
+   "q": "Brennan was researching his school project and had to downlo",
+   "gold": "400",
+   "prefix_head": "Brennan was researching his school project and had to download files from the internet to his computer to use for refere",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "corrupt",
+   "q": "Brennan was researching his school project and had to downlo",
+   "gold": "400",
+   "prefix_head": "Brennan was researching his school project and had to download files from the internet to his computer to use for refere",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "gold",
+   "q": "There are 5 houses on a street, and each of the first four h",
+   "gold": "8",
+   "prefix_head": "There are 5 houses on a street, and each of the first four houses has 3 gnomes in the garden. If there are a total of 20",
+   "scores": [
+    1,
+    0
+   ]
+  },
+  {
+   "tag": "corrupt",
+   "q": "There are 5 houses on a street, and each of the first four h",
+   "gold": "8",
+   "prefix_head": "There are 5 houses on a street, and each of the first four houses has 3 gnomes in the garden. If there are a total of 20",
+   "scores": [
+    1,
+    1
+   ]
+  },
+  {
+   "tag": "gold",
+   "q": "Mrs. Snyder used to spend 40% of her monthly income on rent ",
+   "gold": "1000",
+   "prefix_head": "Mrs. Snyder used to spend 40% of her monthly income on rent and utilities. Her salary was recently increased by $600 so ",
+   "scores": [
+    0,
+    0
+   ]
+  },
+  {
+   "tag": "corrupt",
+   "q": "Mrs. Snyder used to spend 40% of her monthly income on rent ",
+   "gold": "1000",
+   "prefix_head": "Mrs. Snyder used to spend 40% of her monthly income on rent and utilities. Her salary was recently increased by $600 so ",
+   "scores": [
+    0,
+    0
+   ]
+  }
+ ]
+}

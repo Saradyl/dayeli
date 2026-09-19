@@ -1,0 +1,138 @@
+{
+ "name": "v3_stabilized_s42",
+ "adapter": "data/adapter_v3_stabilized_s42",
+ "mode": "full",
+ "agg": {
+  "pass1": 0.333,
+  "passK": 0.5,
+  "uniq_ans_mean": 2.0,
+  "d2_mean": 0.699,
+  "self_ovl_mean": 0.139,
+  "rep_mean": 0.004,
+  "avg_len_mean": 159.75,
+  "nll_mean": 0.2985,
+  "wall_s": 246
+ },
+ "samples": [
+  {
+   "pass1": 0,
+   "passK": 1,
+   "uniq_ans": 2,
+   "d2": 0.711,
+   "self_ovl": 0.082,
+   "rep": 0.0,
+   "avg_len": 159,
+   "nll": 0.5781
+  },
+  {
+   "pass1": 1,
+   "passK": 1,
+   "uniq_ans": 1,
+   "d2": 0.771,
+   "self_ovl": 0.094,
+   "rep": 0.002,
+   "avg_len": 156,
+   "nll": 0.3203
+  },
+  {
+   "pass1": 1,
+   "passK": 1,
+   "uniq_ans": 2,
+   "d2": 0.708,
+   "self_ovl": 0.127,
+   "rep": 0.012,
+   "avg_len": 175,
+   "nll": 0.1338
+  },
+  {
+   "pass1": 0,
+   "passK": 0,
+   "uniq_ans": 3,
+   "d2": 0.77,
+   "self_ovl": 0.057,
+   "rep": 0.02,
+   "avg_len": 180,
+   "nll": 0.3184
+  },
+  {
+   "pass1": 0,
+   "passK": 0,
+   "uniq_ans": 2,
+   "d2": 0.574,
+   "self_ovl": 0.385,
+   "rep": 0.0,
+   "avg_len": 138,
+   "nll": 0.064
+  },
+  {
+   "pass1": 0,
+   "passK": 0,
+   "uniq_ans": 2,
+   "d2": 0.585,
+   "self_ovl": 0.222,
+   "rep": 0.0,
+   "avg_len": 164,
+   "nll": 0.167
+  },
+  {
+   "pass1": 1,
+   "passK": 1,
+   "uniq_ans": 2,
+   "d2": 0.757,
+   "self_ovl": 0.058,
+   "rep": 0.0,
+   "avg_len": 171,
+   "nll": 0.4473
+  },
+  {
+   "pass1": 0,
+   "passK": 0,
+   "uniq_ans": 2,
+   "d2": 0.676,
+   "self_ovl": 0.194,
+   "rep": 0.002,
+   "avg_len": 144,
+   "nll": 0.3184
+  },
+  {
+   "pass1": 0,
+   "passK": 1,
+   "uniq_ans": 2,
+   "d2": 0.71,
+   "self_ovl": 0.143,
+   "rep": 0.0,
+   "avg_len": 151,
+   "nll": 0.3652
+  },
+  {
+   "pass1": 1,
+   "passK": 1,
+   "uniq_ans": 2,
+   "d2": 0.681,
+   "self_ovl": 0.125,
+   "rep": 0.002,
+   "avg_len": 133,
+   "nll": 0.1719
+  },
+  {
+   "pass1": 0,
+   "passK": 0,
+   "uniq_ans": 2,
+   "d2": 0.733,
+   "self_ovl": 0.099,
+   "rep": 0.0,
+   "avg_len": 177,
+   "nll": 0.5508
+  },
+  {
+   "pass1": 0,
+   "passK": 0,
+   "uniq_ans": 2,
+   "d2": 0.717,
+   "self_ovl": 0.088,
+   "rep": 0.008,
+   "avg_len": 169,
+   "nll": 0.1465
+  }
+ ]
+}

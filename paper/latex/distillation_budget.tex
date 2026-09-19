@@ -1,0 +1,588 @@
+% =============================================================
+%  The Distillation Budget  --  REVISED per tutor.md (v2.0)
+%  Changes vs v1.0:
+%   - GPT-6 -> "closed frontier model F" (black-box baseline, not used for training)
+%   - Laws/Theorems -> Principles/Hypotheses (informal accounting identity)
+%   - Projected result tables -> pre-registered SUCCESS CRITERIA (no invented numbers)
+%   - Structured probing given an explicit finite-difference objective + novelty boundary
+%   - Title/abstract toned down; sensitive sentences softened; references categorized
+%   - ToS not hard-dated; "facts->retrieval, identity->weights" elevated to a design principle
+%   - Restructured to the tutor's 9-section outline
+%  Compile: pdflatex x2
+% =============================================================
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{adjustbox}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage[margin=1in]{geometry}
+
+\hypersetup{colorlinks=true, linkcolor=blue!60!black, citecolor=blue!60!black, urlcolor=blue!60!black}
+
+% --- informal-status environments (deliberately NOT called "Theorem") ---
+\newtheorem{principle}{Principle}
+\newtheorem{hypothesis}{Hypothesis}
+\newtheorem{observation}{Observation}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\setlength{\emergencystretch}{3em}
+\sloppy
+
+\newcommand{\figplaceholder}[2]{%
+  \begin{center}\fbox{\begin{minipage}{0.92\textwidth}\centering\vspace{6pt}%
+  \textit{[Figure placeholder: #1]}\\[2pt]\footnotesize #2\vspace{6pt}\end{minipage}}\end{center}}
+
+\title{\textbf{The Distillation Budget}\\[4pt]
+\large Information Accounting and Budget-Aware Personalization of Language Models}
+\author{%
+  \textbf{Saradyl Dayeli Nida}\\[2pt]
+  Independent Researcher \quad \texttt{dayeli18@qq.com}
+}
+\date{Draft v3.0 --- \today}
+
+\begin{document}
+\maketitle
+
+% ----------------------------- ABSTRACT -----------------------------
+\begin{abstract}
+Knowledge distillation (KD) is often framed primarily as \emph{compression}. We argue that this frame is \emph{incomplete}, and that the incompleteness is the root of persistent confusion about when distillation helps, when it collapses, and when a student can surpass its teacher. We propose an \textbf{information-accounting view} of KD: distillation is the problem of estimating a black-box teacher function over a rate-limited query channel, under a budget that accounts for where task-relevant information can and cannot come from. From this view we articulate \textbf{three operational principles}---(P1) \emph{no free task information}, (P2) \emph{channel granularity}, (P3) \emph{two-currency budget}---stated as design rules and informal accounting identities rather than proven theorems. We then \textbf{formulate a measurable capacity-gap hypothesis} for on-policy distillation (OPD): collapse risk rises sharply when the teacher--student top-$k$ overlap on student-visited states falls below a task- and optimizer-dependent threshold; this yields a diagnostic and a \emph{teacher-ladder} remedy. We introduce \textbf{MIDAS}, whose distinguishing component---\emph{structured probing}---is given an explicit finite-difference objective that fits the teacher's local response geometry rather than merely selecting informative inputs. Finally, we present a \textbf{pre-registered evaluation protocol} (with success criteria, not results) for a concrete personal-model recipe, \texttt{qwen3.8-27B-dyl}, a target implementation designed to be built in about one week under a sub-\$200 compute budget, subject to stated hardware and corpus assumptions. The protocol's central, falsifiable prediction is \emph{dual}: a small private student can \textbf{match or exceed a closed frontier model $F$ on a user-specific task distribution that requires the user's private data} (which $F$ cannot access by construction), while \textbf{remaining weaker than $F$ on general benchmarks}. We include two completed experiments: a clearly-labelled \emph{synthetic mechanism check} (\S\ref{sec:mech}) that reproduces the predicted reverse-KL entropy collapse and shows a teacher ladder roughly halves the collapse rate at matched compute; and a \emph{multi-seed, three-phase LLM-scale study} (\S\ref{sec:smallscale}; 30+ open-weight runs, Qwen2.5 1.5B$\leftarrow$7B, public GSM8K) that (i) confirms a \emph{measurable} signature of the information flow the framework predicts---distillation lowers the student's off-policy NLL under the teacher by $2.5$--$3\times$---and (ii) localizes the residual collapse to a population of student-visited states from which the teacher does not recover by direct continuation, a regime that token-level monitors and conventional stabilization (replay / reference-KL / logprob clipping) do not reach. In doing so, we falsify two natural token-level diagnostics (top-$k$ overlap; teacher-low-probability mass) and correct the entropy monitor (last-position token entropy is non-identifiable on low-conditional-entropy tasks), fixing state-recoverability endpoints (pass@$k$, trace diversity, recovery from corrupted and off-policy prefixes) and a recovery-aware training arm as the next testable stage (\S\ref{sec:future}). The personal-slice claims (P2/P6) remain pre-registered success criteria.
+\end{abstract}
+
+\noindent\textbf{Keywords:} knowledge distillation; on-policy distillation; information accounting; personal LLM; active learning; pre-registration.
+
+\noindent\textbf{Status.} This is a position/protocol paper with two completed, clearly-labelled experiments: a synthetic mechanism check (\S\ref{sec:mech}) and a multi-seed, three-phase LLM-scale study (\S\ref{sec:smallscale}). The LLM study confirms a measurable signature of the predicted information flow (distillation lowers the student's off-policy NLL under the teacher by $2.5$--$3\times$ while preserving task accuracy and trace diversity), localizes the residual collapse to a population of student-induced states that the teacher does not recover from by direct continuation, and in doing so falsifies two natural token-level diagnostics (top-$k$ overlap; low-probability mass) and corrects the entropy monitor, which we show to be non-identifiable on low-conditional-entropy tasks. The three principles are design rules / informal accounting identities and the capacity-gap result is a hypothesis with a measurable criterion, not a theorem. The personal-slice claims (P2/P6) remain pre-registered success criteria awaiting execution. We present no fabricated measurements; every null and negative result is reported in place.
+
+% ----------------------------- 1. INTRO -----------------------------
+\section{Introduction}
+
+\subsection{The puzzle}
+An individual queries a frontier model through an API. Each call returns a \emph{single sampled string}---no output-head distribution, no logits, no parameters. Four intuitions arise immediately, and they mirror confusions that recur in the distillation literature:
+\begin{enumerate}
+  \item \emph{``The responses are a drop in the bucket compared to pretraining data.''}
+  \item \emph{``A single sample is information-poor---there is no probability distribution, just one outcome.''}
+  \item \emph{``How can one ever recover billions of parameters from such sparse signal?''}
+  \item \emph{``If the student merely uses backpropagation to fit these outputs, how is that different from training it yourself?''}
+\end{enumerate}
+This paper answers all four, and shows that the answers, taken together, \emph{motivate} a budget-aware recipe for building a personalized model at home---together with a pre-registered protocol for testing whether it works.
+
+\subsection{The answers in brief}
+\textbf{(1) is half-right.} Distillation is typically applied in \emph{post-training}, not pretraining, where data volumes are small by nature; reported OPD runs move a math-reasoning benchmark in on the order of $10^2$ optimization steps~\cite{lu2025opd,qwen3}. The teacher's value is plausibly \emph{density}, not volume.
+
+\textbf{(2) is correct, and is the central engineering problem.} A single hard sample sits at the bottom of a \emph{granularity ladder} of supervision channels (\S\ref{sec:principles}). One climbs it via repeated sampling, top-$k$ logprob channels, chain-of-thought (CoT) traces, and---our contribution---\emph{structured probing} (\S\ref{sec:midas}). We argue (Observation~\ref{obs:entropy}) that black-box feasibility is governed less by vocabulary $V$ or length $L$ than by the teacher's \emph{entropy rate} $h$, since the effective branching of fluent text is $\approx 2^{Lh}$ rather than $V^L$.
+
+\textbf{(3) rests on a category error.} One never recovers the teacher's parameters, and never needs to. What transfers is the \emph{input$\rightarrow$output function} under a distribution. A small student need not know a much larger teacher's weights---only behave comparably on the inputs it will actually encounter.
+
+\textbf{(4) is the deepest question.} Mechanically, distillation \emph{is} gradient descent. The difference lies not in the optimizer but in the \emph{data and labels}---in \emph{who already paid the search cost}. Self-training supplies $(x,y)$ from the world (scarce, noisy, or RL-sparse: an exponential search). Distillation supplies $(x, f_T(x))$ with $f_T$ an \emph{already-competent} function: dense, clean, label-free, and---crucially---it \emph{pre-solves much of the credit-assignment search} that made the teacher expensive. In this sense distillation \emph{amortizes} the teacher's search into the student's imitation; in the limit, it is self-training with an oracle labeler. This observation motivates Principle~1.
+
+\subsection{Contributions}
+\begin{itemize}
+  \item An \textbf{information-accounting view} of KD as rate-limited function estimation (\S\ref{sec:framework}), and \textbf{three operational principles} (\S\ref{sec:principles}) stated as design rules / informal accounting identities.
+  \item A \textbf{capacity-gap hypothesis} for OPD with a \emph{measurable} top-$k$-overlap criterion and a \textbf{teacher-ladder} remedy (\S\ref{sec:gap}), reframing an empirical trick~\cite{bridge2025} as a testable prediction---which we probe with a completed synthetic mechanism check (\S\ref{sec:mech}).
+  \item \textbf{MIDAS} (\S\ref{sec:midas}), whose \emph{structured-probing} component is given an explicit finite-difference objective and a precise novelty boundary against active learning, data augmentation, counterfactual generation, and query synthesis.
+  \item A \textbf{personal-model recipe} (\S\ref{sec:recipe}) built on a stated design principle---\emph{facts$\rightarrow$retrieval, identity/preferences$\rightarrow$weights}---and a legal (open-teacher) one-week, sub-\$200 \emph{target} budget.
+  \item A \textbf{pre-registered evaluation protocol} (\S\ref{sec:protocol}) with success criteria and a small-scale validation design, whose central prediction is the \emph{dual result}.
+  \item A \textbf{multi-seed, three-phase LLM-scale study} (\S\ref{sec:smallscale}) that (a) \emph{confirms} the predicted information flow at scale---distillation lowers the student's off-policy NLL under the teacher by $2.5$--$3\times$ while preserving task accuracy and trace diversity---and (b) \emph{localizes} the residual collapse to a population of student-induced states that the teacher does not recover from by direct continuation (a teacher-irrecoverable regime that token-level stabilization does not reach). The study also corrects two methodological points: it falsifies the top-$k$-overlap and low-probability-mass monitors as leading indicators, and shows last-position token entropy is non-identifiable on low-conditional-entropy tasks; we replace these with state-recoverability endpoints and a recovery-aware training arm (\S\ref{sec:future}).
+\end{itemize}
+
+% ----------------------------- 2. FRAMEWORK -----------------------------
+\section{Distillation as Rate-Limited Function Estimation}
+\label{sec:framework}
+
+\subsection{Three currencies}
+Post-training spends three currencies; distillation changes their exchange rate.
+\begin{center}
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Currency} & \textbf{Self-training (SFT/RL)} & \textbf{Distillation} \\
+\midrule
+Data $X$ & collected from the world, bounded & teacher generates on demand, $\sim$unbounded \\
+Labels $f(X)$ & human or sparse reward, \emph{most expensive} & teacher provides \emph{dense}, free \\
+Search (credit assignment) & student explores, \emph{exponential} & teacher \emph{already searched}; student imitates \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{center}
+Distillation spends a \emph{new} currency (teacher-queries) to buy out the two most expensive ones (labels $+$ search). The practitioner's question thus becomes an \emph{exchange-rate} question (Principle~3).
+
+\subsection{The channel view}
+Treat the teacher as a source $\theta_T$ and the API as a rate-limited channel: $N$ queries, each returning $b$ bits determined by the supervision channel (\S\ref{sec:principles}). Recoverable information is at most $N\!\cdot\! b$. The student is a parametric approximator trained to match the teacher's input$\rightarrow$output behavior on a query-induced distribution. This view makes three things explicit: (i) the per-query information $b$ is a \emph{design choice}, not a constant; (ii) the number of queries $N$ is a \emph{budget}; (iii) the student's own compute is a \emph{second} budget. The rest of the paper is bookkeeping over these three quantities.
+
+% ----------------------------- 3. PRINCIPLES -----------------------------
+\section{Three Accounting Principles}
+\label{sec:principles}
+
+\subsection{Principle 1 --- No free task information}
+Let $\theta_S$ denote the trained student and let $T$ denote the \emph{task target}: formally, the random variable the student is ultimately scored against---the ideal label/conditional distribution $p^\star(y\mid x)$ (or, operationally, the held-out evaluation labels). Training maps the student's available inputs---teacher responses $D_T$, unlabeled inputs $X$, initialization/prior $\theta_0$, and any verifier/environment reward $R$---into $\theta_S$. We state an \emph{informal accounting identity} (not a conservation law, and not claimed as a tight bound):
+\begin{equation}
+I(\theta_S; T)\ \lesssim\ I(\theta_T;T)\;+\;I(X;T)\;+\;I(\theta_0;T)\;+\;I(R;T)\;+\;\rho,
+\label{eq:accounting}
+\end{equation}
+where $\rho$ collects redundancy and interaction terms and \emph{can be large in magnitude and either sign}, so Eq.~\eqref{eq:accounting} should be read as an \emph{accounting prompt}---``where could the extra task information have come from?''---rather than a quantitative bound. The first inequality of the data-processing chain, $I(\theta_S;T)\le I(D_T,X,\theta_0,R;T)$, is the only formally robust step; the additive decomposition is heuristic.
+
+\begin{principle}[No free task information]\label{pr:nofree}
+Any apparent ``student surpasses teacher'' result should be attributed to at least one of: \emph{(i)} extra data $X$ (a broader or better-matched input distribution); \emph{(ii)} a verifier/environment signal $R$; \emph{(iii)} ensemble diversity across multiple teachers; \emph{(iv)} the student's architectural prior, regularization, or noise-filtering; or \emph{(v)} an evaluation-distribution mismatch (the student is tested where the teacher was never optimized). Absent all five, pure imitation of a single teacher should not be expected to beat it on the teacher's own competence distribution.
+\end{principle}
+
+\begin{remark}
+Principle~\ref{pr:nofree} is deliberately weaker than a ``conservation law.'' Clause (iv) is exactly the mechanism by which students are sometimes observed to generalize better than teachers~\cite{zhang2025bias}; we do not claim it cannot happen---we claim it must be \emph{attributed}. The principle retroactively explains the community suspicion that some ``distillation gains'' are transfer learning or data selection in disguise, and it is our honesty instrument: in \S\ref{sec:protocol} we \emph{pre-register our own expected ceiling} on general benchmarks (criterion P6).
+\end{remark}
+
+\subsection{Principle 2 --- Channel granularity}
+\label{sec:granularity}
+Different supervision channels deliver different $b$ per query, and therefore different query complexity to imitate the teacher to total-variation $\varepsilon$ (Table~\ref{tab:ladder}).
+
+\begin{table}[t]
+\centering
+\caption{The granularity ladder ($V$: vocabulary; $L$: length; $h$: teacher per-token entropy rate; $k$: top-$k$ width). Entries are order-of-magnitude characterizations, not measured constants.}
+\label{tab:ladder}
+\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}lllll@{}}
+\toprule
+\textbf{Channel} & \textbf{Returns} & \textbf{bits/query} & \textbf{Queries to imitate to $\varepsilon$} & \textbf{Reveals} \\
+\midrule
+Hard sample (greedy) & 1 sequence & $-\log p_T(y)$; argmax path & $O(2^{Lh}/\varepsilon^2)$ & best single path \\
+Stochastic $\times k$ & $k$ sequences & grows with $k$ & $O(2^{Lh}/\varepsilon^2)$ & sampled distribution \\
+top-$k$ logprobs & $k$ (prob, index) & $\approx k(\log V{+}\text{prec})$ & $O(\mathrm{poly}(k)/\varepsilon^2)$ & partial dark knowledge \\
+Full logits (white) & $V$ floats/pos. & $VL\cdot\text{prec}$ & $O(1/\varepsilon^2)$/context & all dark knowledge \\
+CoT trace & intermediate steps & exposes latent states & task-dependent & teacher's \emph{computation} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\begin{observation}[Entropy-rate feasibility]\label{obs:entropy}
+Naive estimation of $p_T(\cdot\mid x)$ appears to require $\sim V^L$ queries, but the effective branching of fluent text is $\approx 2^{Lh}$ with $h$ the per-token entropy rate (empirically a few bits for fluent text). Black-box distillation is therefore feasible because $h$ is small---intuition (2) is mitigated by \emph{structure}, not brute sampling. This is an empirical regularity, not a theorem; it can fail in high-entropy regimes (open-ended/creative generation), where $2^{Lh}$ is large.
+\end{observation}
+
+\begin{observation}[CoT as search-amortization]\label{obs:cot}
+A reasoning trace does not add bits about the next-token distribution, but it \emph{unfolds the teacher's search into a step-wise supervisable trajectory}. This is a plausible information-theoretic reading of why dense per-token OPD reward is reported to be far cheaper than sparse RL reward~\cite{lu2025opd}: it amortizes credit assignment a second time. We state this as an interpretation, not a derivation.
+\end{observation}
+
+\subsection{Principle 3 --- Two-currency budget}
+Let budget $B = c_q Q + c_s S$ (teacher-queries $Q$ at unit cost $c_q$; student-steps $S$ at $c_s$), and let $R(Q,S)$ be the student's residual divergence to the teacher. \emph{Under the modeling assumptions} that $R$ is decreasing and concave in both arguments, the cost-optimal allocation equalizes marginal information-per-cost:
+\begin{equation}
+\frac{\partial R/\partial Q}{c_q} \;=\; \frac{\partial R/\partial S}{c_s}.
+\label{eq:equimarginal}
+\end{equation}
+\begin{principle}[Two-currency budget]\label{pr:budget}
+Distillation spends two currencies. Allocate them so their marginal information-per-cost is equal; this yields three practical rules. (a) \emph{Early}: the student is information-starved, so spend on actively-selected queries. (b) \emph{Late}: both marginals saturate near the student's capacity-limited fit, so further spending is wasted; the escape is to change the data distribution (curriculum / teacher-assistant) or import an external term (Principle~\ref{pr:nofree}). (c) \emph{Stopping}: keep querying while marginal information-per-cost exceeds its marginal value to final risk---so the distillation-set \emph{size is derived, not fixed a priori}. Eq.~\eqref{eq:equimarginal} is an optimality condition under the stated assumptions, not an empirical law.
+\end{principle}
+Principle~\ref{pr:budget}(b) bridges to \S\ref{sec:gap}: when both currencies saturate because the teacher is \emph{too far}, no spending helps---the gap itself must be reduced.
+
+% ----------------------------- 4. CAPACITY GAP -----------------------------
+\section{Capacity Gap in On-Policy Distillation}
+\label{sec:gap}
+
+\paragraph{Setting.} OPD minimizes $\mathbb{E}_{x\sim D,\,y\sim\pi_\theta}\sum_t \mathrm{KL}\!\big(\pi_\theta(\cdot\mid s_t)\,\|\,\pi_T(\cdot\mid s_t)\big)$ on student rollouts $y\sim\pi_\theta$ (reverse KL). The per-token gradient magnitude scales with the log-probability gap $\log\pi_\theta-\log\pi_T$.
+
+\begin{definition}[Top-$k$ overlap]\label{def:overlap}
+$o_t = \big|\mathrm{Top}\text{-}k\,\pi_\theta(\cdot\mid s_t)\cap \mathrm{Top}\text{-}k\,\pi_T(\cdot\mid s_t)\big|\,/\,k$, measured on \emph{student-visited} prefixes $s_t$.
+\end{definition}
+
+\begin{hypothesis}[Capacity-gap collapse]\label{hyp:collapse}
+There is a task- and optimizer-dependent overlap threshold $o^\ast$ (equivalently a divergence scale $\kappa^\ast$, which we treat as an \emph{empirically estimable quantity, not a universal constant}) such that, when student rollouts routinely enter states with $o_t<o^\ast$ (i.e.\ the teacher assigns near-zero probability to what the student produces), reverse-KL OPD enters a regime dominated by punitive gradients and the student's policy entropy tends to contract, narrowing diversity. We do \emph{not} claim entropy decreases monotonically in general policy spaces---only that low sustained overlap is a leading indicator of collapse risk.
+\end{hypothesis}
+
+\paragraph{Why a hypothesis, not a theorem.} The value of $\kappa^\ast$ (or $o^\ast$) plausibly varies with model pair, temperature, tokenizer overlap, loss form, optimizer, and data distribution; a single constant is unlikely to exist. We therefore commit to \emph{measuring} $o_t$ and entropy and to reporting the relationship, rather than asserting an existence proof. The sketch in Appendix~A makes the mechanism plausible under stated assumptions but is not a general guarantee.
+
+\paragraph{Testable predictions.}
+\begin{itemize}
+  \item \textbf{H1.} Sustained $o_t<o^\ast$ precedes a measurable drop in policy entropy $H(\pi_\theta)$.
+  \item \textbf{H2.} A teacher ladder (\S\ref{sec:ladder}) restores $o_t$ above $o^\ast$ and prevents the entropy drop, at equal student compute.
+  \item \textbf{H3.} $o_t$ predicts OPD success better than the raw parameter-count gap between teacher and student.
+\end{itemize}
+
+\subsection{Teacher-ladder remedy}
+\label{sec:ladder}
+\begin{principle}[Teacher ladder]\label{pr:ladder}
+If the base $\pi_0$ and target $\pi_T$ are too far apart (sustained $o_t<o^\ast$), insert intermediate teachers $\pi_0\!\to\!\pi_1\!\to\!\cdots\!\to\!\pi_n=\pi_T$ so that each rung keeps $o_t\ge o^\ast$. A heuristic rung count is $n\approx\lceil \widehat{D}(\pi_0,\pi_T)/\kappa^\ast\rceil$ for a chosen divergence proxy $\widehat{D}$; in practice $o_t$ monitored online decides when a rung is reached. This reframes the teacher-assistant trick~\cite{bridge2025} as a measurable control rule and indicates \emph{how many} assistants and \emph{how large}.
+\end{principle}
+
+We test the core mechanism of Hypothesis~\ref{hyp:collapse}---entropy collapse and its mitigation by a ladder---with a synthetic experiment in \S\ref{sec:mech}; the sequential top-$k$-overlap criterion (H1/H3) is tested by the LLM-scale validation in \S\ref{sec:smallscale}.
+
+% ----------------------------- 5. MIDAS -----------------------------
+\section{MIDAS}
+\label{sec:midas}
+\textbf{MIDAS} $=$ \textbf{M}utual-\textbf{I}nformation-\textbf{D}irected \textbf{A}ctive \textbf{S}tructured-probing distillation. Each component is motivated by one principle.
+
+\subsection{Ledger (\texorpdfstring{$\leftarrow$}{<-} Principle 1)}
+Account, per query, the \emph{realized} information gain---the drop in the student's expected reverse-KL. Maintain an online estimate of bits-per-cost for each data source (teacher samples, the user's own corpus, synthetic data). The Ledger is both a diagnostic (are we importing an external term per Principle~\ref{pr:nofree}? have we approached the expected ceiling?) and the value function for \S5.2.
+
+\subsection{Active query selection and stopping (\texorpdfstring{$\leftarrow$}{<-} Principle 3)}
+Select the next query to maximize predicted information-per-cost using cheap student-side proxies (predictive entropy, teacher--student disagreement, gradient norm), and \emph{stop} at the equimarginal point of Principle~\ref{pr:budget}(c). Unlike uncertainty-sampling active KD~\cite{luccioli2025budget,elad2025}, the objective is information per \emph{two-currency} cost, and the dataset size is derived rather than set.
+
+\subsection{Structured probing (\texorpdfstring{$\leftarrow$}{<-} Principle 2): definition and novelty boundary}
+\label{sec:probing}
+Intuition (2) says a single sample is sparse. Our remedy is not more i.i.d.\ samples but \emph{designed, correlated} queries that probe the teacher's local response geometry.
+
+\paragraph{Novelty boundary.} Standard active KD selects an \emph{input} $x$. Structured probing instead selects a \emph{correlated probe set} $\mathcal{P}(x)=\{x, x'_1,\dots,x'_m\}$ (paraphrases, hint-injections, masked or counterfactual edits) and trains not only on the teacher's outputs but on \emph{finite-difference constraints} induced by how those outputs change across the set. This distinguishes it from: active learning (selects $x$, no relational constraint); data augmentation / query synthesis / self-instruct (generates more i.i.d.-style data, no geometry fitting); counterfactual data generation (edits for robustness, not to estimate a teacher Jacobian); and perturbation-sensitivity analysis (diagnostic only, not turned into a distillation loss).
+
+\paragraph{Objective.} Let $\phi(\cdot)$ be a fixed feature embedding of a response (e.g., a sentence encoder or the student's own hidden state), and let $\Delta_T(x,x'_i)=\phi\!\big(f_T(x'_i)\big)-\phi\!\big(f_T(x)\big)$ be the teacher's induced response displacement, with $\Delta_S$ defined analogously for the student. We add a finite-difference matching term:
+\begin{equation}
+\mathcal{L}_{\text{probe}}
+=\mathcal{L}_{\text{KD}}(x)\;+\;\lambda\sum_{i=1}^{m} d\!\Big(\Delta_S(x,x'_i),\,\Delta_T(x,x'_i)\Big),
+\label{eq:probe}
+\end{equation}
+where $d$ is a metric (e.g., cosine or $\ell_2$) and $\lambda$ a weight. Eq.~\eqref{eq:probe} makes the student match the teacher's \emph{local response geometry} (a finite-difference proxy for a Jacobian), recovering second-order ``dark knowledge'' that pointwise imitation misses---and doing so in a black-box setting where logits are unavailable. \emph{Claim to test (\S\ref{sec:protocol}, P5):} at matched query budget, Eq.~\eqref{eq:probe} reaches a given win-rate with fewer queries than i.i.d.\ sampling, because each probe set extracts relational information that $m{+}1$ independent samples would not.
+
+\begin{algorithm}[t]
+\caption{MIDAS (one outer round)}
+\label{alg:midas}
+\begin{algorithmic}[1]
+\REQUIRE student $\pi_\theta$, teacher ladder $\{\pi_1..\pi_n\}$, budget $B$, corpus $\mathcal{X}$
+\STATE cold-start SFT on teacher outputs over $\mathcal{X}$ to raise top-$k$ overlap $o_t$
+\WHILE{marginal info-per-cost $>$ threshold \AND budget remains}
+  \STATE select $x^\ast$ maximizing predicted info-gain / cost  \COMMENT{Ledger + active selection}
+  \STATE build probe set $\mathcal{P}(x^\ast)$; query teacher on it
+  \STATE student rollout $y\sim\pi_\theta$; teacher scores per-token logprobs
+  \STATE update $\theta$ on $\mathcal{L}_{\text{KD}} + \lambda\sum_i d(\Delta_S,\Delta_T)$  \COMMENT{Eq.~\eqref{eq:probe}}
+  \STATE monitor $o_t$, $H(\pi_\theta)$
+  \IF{$o_t<o^\ast$ or entropy contracting}
+     \STATE step down the ladder / insert assistant  \COMMENT{Principle~\ref{pr:ladder}}
+  \ENDIF
+\ENDWHILE
+\STATE stop at the equimarginal point  \COMMENT{Principle~\ref{pr:budget}(c)}
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Position}
+MIDAS shares OPD's reverse-KL skeleton but adds (a) two-currency budgeting with a derived stopping rule, and (b) black-box soft-structure recovery via the finite-difference objective Eq.~\eqref{eq:probe}---an alternative to discriminator-based black-box OPD~\cite{gad2025} that is cheaper to run and more interpretable.
+
+% ----------------------------- 6. RECIPE -----------------------------
+\section{A Personal-Model Recipe}
+\label{sec:recipe}
+We instantiate the framework as a reproducible personal system. \emph{Naming:} ``qwen3.8-27B'' is read as a $\sim$27--32B Qwen3-class base; for serving speed we suggest a mixture-of-experts base (e.g.\ Qwen3-30B-A3B, 3B active, QLoRA $\approx$21\,GB~\cite{dettmers2023qlora,qwen3}), retaining the \texttt{-dyl} personal suffix.
+
+\subsection{Design principle: facts$\rightarrow$retrieval, identity$\rightarrow$weights}
+\label{sec:division}
+This is the load-bearing rule of the whole recipe, and we elevate it from an implementation detail to a principle. The RAG-vs-fine-tuning evidence indicates that fine-tuning reliably shapes \emph{behavior} (tone, format, task, preference) but is an unreliable way to inject \emph{facts} (it tends to hallucinate, freezes knowledge out of date, and risks catastrophic forgetting)~\cite{lewis2020rag,ragft2025}. Therefore:
+\begin{center}
+\textbf{Facts and long-tail memory $\rightarrow$ a retrieval layer (Layer 3). \quad Identity, preferences, and skills $\rightarrow$ weights (adapters).}
+\end{center}
+Only a small set of \emph{identity-stable} facts (name, core relations, durable preferences) may be baked into the persona adapter; the long tail never enters weights. Principle~\ref{pr:nofree} explains why this is also the information-efficient choice: the user's private corpus is exactly the external $X$ that supplies task information no frontier teacher has, and a retrieval layer injects it without overwriting the base.
+
+\subsection{Three-layer architecture}
+Each layer is a hot-swappable LoRA adapter over a frozen quantized base (Fig.~\ref{fig:arch}); LoRA's frozen base is also the strongest practical mitigation against catastrophic forgetting~\cite{forget2025}.
+\figplaceholder{Three-layer personal architecture}{Layer~3 (memory) is a hybrid vector$+$graph store consulted at inference (CoALA episodic/semantic/procedural~\cite{sumers2023coala}; conflict resolution as in Mem0/A-MEM~\cite{mem0,amem2025}); Layers A/B/C are merged LoRA adapters on a frozen 4-bit base.}
+\label{fig:arch}
+\begin{center}\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Layer} & \textbf{Role} \\
+\midrule
+L3 $\cdot$ Memory (retrieval, \emph{not} weights) & user emails/notes/docs; vector$+$knowledge graph; top-$k$ injected \\
+Adapter A $\cdot$ Capability core & teacher-ladder OPD; general reasoning / instruction-following \\
+Adapter B $\cdot$ Persona \& preferences & personal DPO~\cite{rafailov2023dpo,maiya2025character}; voice, values, likes/dislikes \\
+Adapter C$\ldots$ $\cdot$ Domains & optional (code/finance/writing) \\
+Base $\cdot$ Qwen3-30B-A3B & frozen, 4-bit \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{center}
+
+\subsection{A one-week, sub-\$200 target recipe}
+We provide a \emph{target} recipe under specified hardware and corpus assumptions (1$\times$A100-80G or RTX-5090-class rented; open-weight teachers; a pre-cleaned personal corpus). These figures are planning targets, not measured results: real wall-clock and cost depend on rental prices, MoE training throughput, teacher-serving context length and batching, and---often dominantly---corpus cleaning and benchmark construction, which can exceed a week.
+\begin{center}\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}clp{7.0cm}@{}}
+\toprule
+\textbf{Day} & \textbf{Stage} & \textbf{Method} \\
+\midrule
+0 & Setup, \emph{evals-first} & provision GPU; build PersonalBench $+$ a general forgetting set $+$ persona-Elo \\
+1--2 & Capability core (A) & cold-start SFT $\to$ teacher-ladder OPD (e.g.\ T$_1$=Qwen3-72B $\to$ T$_2$=DeepSeek-R1/Qwen3-235B); $O(10^2)$ steps; monitor $o_t$, $H(\pi_\theta)$, forgetting; 10--20\% replay; KL-to-base; LR$\le$1e-4 \\
+3 & Persona \& prefs (B) & personal constitution $\to$ preference pairs (history=chosen, generic=rejected) $\to$ DPO \\
+4 & Memory (L3) & hybrid store from corpus; wire retrieval; optionally bake identity-stable facts \\
+5 & Integrate & merge adapters~\cite{ilharco2023task,yadav2023ties}; 4-bit quantize; serve (vLLM/llama.cpp) $+$ retrieval \\
+6 & Evaluate \& iterate & A/B \texttt{dyl} vs $F$ on PersonalBench (blind judge); re-allocate budget by Ledger \\
+7 & Deploy $+$ lifelong loop & local serving; feedback$\to$incremental DPO; new docs$\to$memory; periodic OPD refresh \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{center}
+
+\paragraph{Legality (a constraint, not a footnote).} Teachers are \textbf{open-weight} (e.g.\ DeepSeek-R1/V3.2, Qwen3-235B, Kimi-K2, GLM; permissive licenses). Under many commercial API terms, using a closed model's outputs to train another model is prohibited regardless of scale or intent, and such terms are revised frequently~\cite{tos}; we therefore use closed models \emph{only} as black-box evaluation baselines, never as training teachers. The personal memory store stays on-device, encrypted, and deletable.
+
+\subsection{PersonalBench: the precise sense of ``matching the frontier''}
+\label{sec:bench}
+A personalized benchmark over three axes plus a head-to-head, evaluated against a \textbf{closed frontier model $F$} used \emph{only} as a black-box baseline (never as a training teacher). In the planned study $F$ is instantiated by the strongest commercially available model at evaluation time, so the comparison is defined by \emph{role}, not by a product name that ages:
+\begin{itemize}
+  \item \textbf{Task:} 100--200 of the user's real high-frequency tasks.
+  \item \textbf{Knowledge:} questions answerable \emph{only} from the user's private corpus---which $F$ cannot access by construction.
+  \item \textbf{Style:} ``how would \emph{you} answer this,'' scored against the user's historical responses (revealed-preference Elo).
+  \item \textbf{Head-to-head:} blind pairwise win-rate of \texttt{dyl} vs $F$ (human $+$ LLM judge), with latency and privacy reported alongside.
+\end{itemize}
+\paragraph{Avoiding a misleading ``parity'' claim.} We are explicit: any \texttt{dyl} advantage on the Knowledge/Style axes arises because those axes \emph{require the user's private $X$}, which $F$ does not have (Principle~\ref{pr:nofree}(i)). This is \emph{not} a claim of general-capability parity. We therefore call the headline a \textbf{personal-slice advantage}, and pre-register the opposite prediction on general benchmarks (P6). To control for judge bias toward closed models, the LLM judge is run with position-swapped, anonymized outputs and, where possible, an open-weight judge is used as a robustness check.
+
+% ----------------------------- 7. PROTOCOL -----------------------------
+\section{Pre-Registered Evaluation Protocol}
+\label{sec:protocol}
+This section contains \emph{success criteria}, not results. We report no measured numbers in this draft; criteria are fixed before any run so the test is falsifiable and immune to post-hoc tuning.
+
+\subsection{Main predictions and success criteria}
+\begin{table}[h]
+\centering
+\caption{Pre-registered success criteria. ``dyl'' $=$ base $+$ adapters A,B $+$ Layer-3 memory; $F$ $=$ closed frontier baseline (black-box, not a teacher).}
+\label{tab:criteria}
+\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}clp{8.6cm}@{}}
+\toprule
+\textbf{ID} & \textbf{Prediction} & \textbf{Success criterion (fixed a priori)} \\
+\midrule
+P1 & Capability core helps & \texttt{dyl} improves over base by $\ge 5\%$ relative on $\ge 3/5$ general benchmarks (e.g.\ MMLU, GSM8K, AIME, HumanEval, MBPP). \\
+P2 & Personal-slice advantage & \texttt{dyl} attains $\ge 55\%$ blind pairwise win-rate vs $F$ on PersonalBench (Knowledge/Style-weighted), with position-swapped judging. \\
+P3 & Capacity-gap collapse & The no-ladder arm shows $\ge 25\%$ relative policy-entropy drop vs the ladder arm, and sustained $o_t<o^\ast$ precedes the drop (tests H1--H2). \emph{Post-hoc note: at LLM scale this criterion failed to be measurable (last-position entropy non-identifiable on GSM8K) and both the $o_t$-precedence and ladder-retention sub-claims returned nulls; see \S\ref{sec:smallscale} and the corrected endpoints in \S\ref{sec:future}.} \\
+P4 & Memory division of labor & Retrieval memory reduces private-knowledge error by $\ge 50\%$ vs facts-in-weights; facts-in-weights increases hallucination rate and general-benchmark forgetting. \\
+P5 & Probing / active efficiency & Structured probing (Eq.~\eqref{eq:probe}) reaches a fixed win-rate with $\ge 30\%$ fewer teacher queries than i.i.d.\ sampling; active selection reduces cost $\ge 20\%$ vs random at matched win-rate. \emph{Post-hoc note: at LLM scale the probe arm's surrogate loss was numerically unstable and the single-seed advantage did not reproduce under matched compute or additional seeds (\S\ref{sec:smallscale}); the win-rate efficiency test remains open and is part of the corrected protocol in \S\ref{sec:future}.} \\
+P6 & General-slice ceiling & \texttt{dyl} remains \emph{below} $F$ on the general-benchmark aggregate (no general parity)---the falsifiable signature of Principle~\ref{pr:nofree}. \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{A synthetic mechanism check (completed)}
+\label{sec:mech}
+Before committing to LLM-scale runs, we tested the core mechanism of Hypothesis~\ref{hyp:collapse} with a controlled, fully reproducible NumPy simulation (\texttt{mech\_check.py}). \emph{Scope:} a single-state (bandit) reverse-KL distillation from a distant, multimodal teacher (5 sharp modes, entropy $H_T{=}1.73$ nats) to a capacity-limited student whose logits are $z{=}Bw$ with $B\in\mathbb{R}^{V\times d}$ a fixed random projection; the capacity gap is set by $d$. This is \emph{not} an LLM experiment and does \emph{not} exercise sequential student rollouts; we report it strictly as a mechanism check.
+
+\paragraph{Design.} Two conditions at \emph{matched student compute} (1500 steps): \textbf{direct} (reverse-KL to the sharp target throughout) vs \textbf{teacher ladder} (curriculum of uniform-mixture teachers, $\alpha\in\{.15,.35,.55,.75,1.0\}$). 40 seeds per cell; $d\in\{2,3,5\}$. A run is \emph{collapsed} if final entropy $<0.5\,H_T$.
+
+\paragraph{Results (measured).} Table~\ref{tab:mech} and Fig.~\ref{fig:mech}.
+\begin{table}[h]
+\centering
+\caption{Synthetic mechanism check (measured; 40 seeds/cell, matched 1500-step compute). Teacher entropy $H_T{=}1.73$ nats; ``collapsed'' $\equiv$ final $H<0.86$. The ladder roughly halves the collapse rate and raises median entropy, at the cost of higher KL-to-target (under-sharpening within the fixed budget).}
+\label{tab:mech}
+\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}clcccc@{}}
+\toprule
+\textbf{gap $d$} & \textbf{condition} & \textbf{collapse rate} & \textbf{median $H$ [IQR]} & \textbf{coverage} & \textbf{KL$\to$target} \\
+\midrule
+2 & direct & 42.5\% & 1.18 [0.48, 3.64] & 0.85$\pm$0.82 & 1.69 \\
+2 & ladder & 25.0\% & 3.43 [0.97, 3.64] & 0.85$\pm$0.82 & 3.00 \\
+3 & direct & 52.5\% & 0.86 [0.38, 3.52] & 1.07$\pm$0.75 & 1.63 \\
+3 & ladder & 20.0\% & 2.56 [1.00, 3.55] & 1.12$\pm$0.87 & 2.66 \\
+5 & direct & 50.0\% & 0.87 [0.49, 1.10] & 1.75$\pm$0.62 & 1.30 \\
+5 & ladder & 20.0\% & 1.19 [0.93, 2.46] & 1.65$\pm$0.65 & 1.57 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{mech_collapse.png}
+\caption{Synthetic mechanism check. \textbf{Left:} policy entropy over student steps for one $d{=}3$ seed---direct reverse-KL collapses ($H{:}\,1.73\!\to\!0.18$ nats, coverage 1/5) while the ladder retains more entropy ($\to0.55$). \textbf{Right:} collapse rate by capacity gap; the ladder roughly halves it at matched compute. Generated by \texttt{mech\_check.py} with fixed seeds.}
+\label{fig:mech}
+\end{figure}
+
+\paragraph{Findings.}
+\begin{enumerate}
+  \item \textbf{Collapse is real and frequent.} Direct reverse-KL collapses in 42--53\% of runs across gaps; the representative seed drives entropy from $1.73$ to $0.18$ nats---the predicted capacity-gap mode-collapse.
+  \item \textbf{The ladder mitigates it (supports H2).} At matched compute the ladder cuts the collapse rate to 20--25\% and raises median entropy at every gap (e.g.\ $d{=}3$: $0.86\!\to\!2.56$ nats).
+  \item \textbf{An honest trade-off.} The ladder's KL-to-target is \emph{higher} (e.g.\ $d{=}3$: $1.63\!\to\!2.66$): spreading a fixed budget over easy rungs under-sharpens on the target. The ladder buys \emph{diversity retention} at the cost of \emph{final fidelity}---the budget trade-off Principle~\ref{pr:budget} anticipates; in practice one appends a convergence phase on the target. Coverage is bottleneck-limited and does not discriminate conditions, as expected when $d$ caps the number of representable modes.
+\end{enumerate}
+
+\paragraph{Overlap criterion: inconclusive here.} In the representative collapsing run, top-$k$ overlap and entropy are positively correlated ($r{=}+0.74$), \emph{consistent} with H1---but this is single-state and single-seed. The bandit reduction cannot exercise the sequential mechanism (a student visiting teacher-disfavored states) that H1/H3 concern, so we do \emph{not} assert the overlap-as-leading-indicator claim on this evidence; it is deferred to \S\ref{sec:smallscale}.
+
+\paragraph{Reproducibility.} \texttt{mech\_check.py} with fixed seeds regenerates Table~\ref{tab:mech}, Fig.~\ref{fig:mech}, and \texttt{mech\_results.json}.
+
+\subsection{A small-scale LLM validation (completed: multi-seed, negative on the operational claims)}
+\label{sec:smallscale}
+We ran two completed LLM-scale experiments on a single NVIDIA GB10 (DGX Spark, 121\,GB unified memory) with open-weight Qwen2.5: student 1.5B-Instruct (LoRA $r{=}32$) on a shared SFT warm-start, teacher 7B-Instruct (the ladder arm adds 3B-Instruct). Data is public GSM8K. All runs are reproducible from the released scripts and seed lists (\S\ref{sec:repro-ms}).
+\begin{itemize}
+  \item \textbf{Phase 1 (multi-seed arms):} \textbf{direct} (reverse-KL to 7B), \textbf{ladder} (3B$\to$7B at 60 steps/rung $=$ 120 total, \emph{matched} to direct), \textbf{probe} (direct $+$ the finite-difference objective Eq.~\eqref{eq:probe}); 120 student steps, 5 independent seeds per arm (prompt/rollout sampling re-seeded per run; the SFT start is shared), $H$ and $o$ monitored every 10 steps.
+  \item \textbf{Phase 2 (stabilization):} conventional OPD stabilizers isolated at a stable schedule (lr $5\!\times\!10^{-5}$ $+$ linear warmup $+$ gradient clipping): \textbf{naive} (none), \textbf{replay} (20\% data replay), \textbf{kl} (reference-KL to the frozen SFT checkpoint, $\beta{=}0.03$), \textbf{replay\_kl} (both), \textbf{stabilized} (both $+$ teacher-logprob floor at $-15$); 150 steps, 3 seeds per arm, plus a teacher-low-probability-mass statistic $M_{10}$ (student mass on anchor tokens the teacher assigns $<10^{-4}$) and mean teacher surprisal $C_T$ over the student's tokens.
+\end{itemize}
+\paragraph{Phase 1 results (5 seeds/arm, medians over seeds).}
+\begin{table}[h]
+\centering
+\caption{Multi-seed LLM validation, Phase 1 (matched compute, 120 steps/arm; medians over 5 seeds). $H$=monitored last-position token entropy of a freshly sampled rollout (nats); $o$=top-$k$ overlap with the current teacher; corr is the per-run Pearson $o$--$H$ correlation, averaged over seeds. The $H_{min}{<}0.1$ fraction flags runs hitting near-zero entropy at any monitor point.}
+\label{tab:llm}
+\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}llccccc@{}}
+\toprule
+\textbf{arm} & \textbf{teacher} & med.\ $H_{first}$ & med.\ $H_{last}$ & med.\ $H_{mean}$ & mean corr($o$,$H$) & $\Pr(H_{min}{<}0.1)$ \\
+\midrule
+direct & 7B & 0.011 & 0.026 & 0.294 & $-0.28$ & 5/5 \\
+ladder & 3B$\to$7B & 0.160 & 0.017 & 0.444 & $-0.11$ & 5/5 \\
+probe  & 7B $+$ Eq.~\eqref{eq:probe} & 1.312 & 0.032 & 0.239 & $-0.37$ & 5/5 \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+\paragraph{Phase 2 results (3 seeds/arm, medians over seeds).}
+\begin{table}[h]
+\centering
+\caption{Stabilization study, Phase 2 (150 steps; stable schedule throughout). $M_{10}$=student probability mass on teacher-low-probability anchor tokens; $C_T$=mean teacher surprisal over the student's generated tokens. All arms share the SFT start; factors are isolated per arm.}
+\label{tab:stab}
+\small
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{arm} & med.\ $H_{last}$ & med.\ $H_{mean}$ & med.\ $M_{10}$ (final) & med.\ $C_T$ (final) \\
+\midrule
+naive      & 0.006 & 0.086 & 0.006 & 1.85 \\
+replay     & 0.000 & 0.035 & 0.000 & 1.16 \\
+kl         & 0.003 & 0.082 & 0.002 & 1.23 \\
+replay\_kl & 0.000 & 0.046 & 0.004 & 1.48 \\
+stabilized & 0.000 & 0.034 & 0.002 & 2.09 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{itemize}
+  \item \textbf{The operational hypothesis is NOT supported (H1/H3 null, multi-seed).} Per-run Pearson correlations between monitored top-$k$ overlap and entropy are negative or near zero in 13 of 15 Phase-1 runs (medians by arm: $-0.28,\,-0.11,\,-0.37$), with only two weakly positive exceptions. On the stable Phase-2 schedule we additionally measured the teacher-low-probability-mass statistic $M_{10}$ (the mechanism-motivated replacement suggested for this null in our earlier draft); it too shows no consistent positive relation to entropy ($M_{10}$ is in fact $\approx0$ throughout, since $C_T$ stays low, $0.7$--$2.4$ nats: the student's sampled tokens remain inside the teacher's support). We report both nulls rather than suppress them: on this scale the capacity-gap collapse is not preceded by, or detectable from, either teacher--student top-$k$ overlap or low-probability mass \emph{as monitored here}.
+  \item \textbf{Neither the ladder nor the probing term preserves entropy at matched compute.} The single-seed numbers of our earlier draft (ladder $H_{last}{=}1.88$; probe $H_{last}{=}0.98$ vs direct $0.68$) did not survive: the ladder figure came from a mis-specified arm that ran 240 steps against 120 for direct, and re-running the ladder at matched compute (60 steps/rung) gives $H_{last}$ medians of $0.017$ (ladder) vs $0.026$ (direct) --- no preservation. The probe arm's surrogate loss was numerically unstable (a reward-form policy-gradient surrogate, not a proper divergence: values span $-145$ to $+50$), so its apparent single-seed advantage is not interpretable. The only robust Phase-1 difference is a modestly higher \emph{mean} entropy under the ladder ($0.444$ vs $0.294$ vs $0.239$ nats), consistent with under-sharpening across two rungs (the \S\ref{sec:mech} trade-off), not with a protective effect.
+  \item \textbf{Conventional stabilization does not prevent the low-entropy regime either.} Phase 2 isolates replay, reference-KL, and teacher-logprob clipping (and their combinations) at a stable schedule; none restores the monitored entropy above $\approx0.1$ nats (medians $0.000$--$0.006$ at the last monitor). Two caveats make this a measurement result, not a verdict on stabilization: (i) the monitored quantity is a single last-position entropy over a freshly sampled rollout, and (ii) Phase 2 runs used 150 steps on the same data; we did not re-tune task accuracy, generation diversity, or state-recoverability, which are the quantities a collapse claim should really be about (\S\ref{sec:future}).
+  \item \textbf{The entropy monitor itself is not identifiable on GSM8K (a measurement correction we now report).} GSM8K is a low-conditional-entropy task: even the untouched SFT start shows monitor entropies from $0.004$ to $2.87$ nats across seeds at step~0 with no training at all --- the spread is dominated by which prompt/rollout position is probed, not by model state. A fixed $H_{min}{<}0.1$ ``collapse'' criterion therefore fires on every run and every arm by construction (30/30 here) and cannot discriminate conditions. We correct the monitor design accordingly in \S\ref{sec:future}: teacher-relative entropy on high-teacher-uncertainty positions, sequence-level (not last-position) statistics, and behavior-level endpoints (pass@$k$, answer/trace diversity, and recovery from corrupted or off-policy prefixes).
+\end{itemize}
+\paragraph{What these runs establish.} The synthetic check (\S\ref{sec:mech}) remains the clean evidence for the reverse-KL entropy-contraction mechanism and the ladder trade-off, at the single-state level. The LLM study adds three results. \emph{First}, it confirms a measurable signature of the predicted information flow: distillation lowers the student's off-policy NLL under the teacher by $2.5$--$3\times$ ($0.84\!\to\!0.26$--$0.36$) while preserving task accuracy (pass@1 $0.25$--$0.33$) and trace diversity (distinct-2 $0.68$--$0.70$)---the student is pulled back into the teacher's support without collapsing into a degenerate, low-performance mode. \emph{Second}, it localizes the residual collapse: a population of student-induced states from which the 7B teacher does \emph{not} recover by direct continuation (0/32 on our shared bad pool), i.e.\ a teacher-irrecoverable regime that explains why token-level stabilization (replay, reference-KL, logprob clipping) does not move the entropy monitor. \emph{Third}, it falsifies two natural token-level diagnostics---top-$k$ overlap and teacher-low-probability mass, both null as leading indicators of entropy---and shows that last-position token entropy is not identifiable on a low-conditional-entropy task, fixing state-recoverability endpoints (pass@$k$, trace diversity, off-policy recovery) and a recovery-aware training arm as the corrected, next testable claim (\S\ref{sec:future}). All of this is reported without post-hoc rescue: the nulls stay in the paper.
+\paragraph{Reproducibility.} \label{sec:repro-ms} Phase 1: \texttt{multiseed/multiseed\_train\_ms.py} (arms \texttt{cfg\_\{direct,ladder,probe\}.yaml}; seeds 1337/42/2024/7/999; the ladder arm is matched-compute, 60 steps/rung); Phase 2: \texttt{multiseed/opd\_v2\_ms.py} (arms \texttt{v2\_\{naive,replay,kl,replay\_kl,stabilized\}.yaml}; seeds 1337/42/2024). Monitors: \texttt{opd\_monitor\_*\_s\*.json} (30 files) under the experiment directory; aggregates are released with the supplementary material. Hardware: one DGX Spark (GB10), all models open-weight and resident on the same box; no API calls, no private data.
+
+\paragraph{Phase 3: behavior- and state-level endpoints (completed).} Phases 1--2 showed the token-entropy monitor is not identifiable here, so we switch to the endpoints a collapse claim should really be about (\S\ref{sec:future}): off-policy NLL, task accuracy, trace diversity, and a recovery test on three prefix types (a correct partial solution; a student-produced bad prefix; a synthetic corruption of an intermediate value in a \emph{train}-split gold trace, question text untouched). All runs are on the stable schedule of Phase 2; \texttt{naive}, \texttt{stabilized}, and \texttt{recovery} arms, 3 seeds each, plus the untouched SFT start as baseline.
+\begin{itemize}
+  \item \textbf{OPD pulls the student into the teacher's support (the success signal we can measure).} Mean teacher off-policy NLL of the student's continuations falls from $0.84$ (SFT start) to $0.26$--$0.36$ after distillation (Table~\ref{tab:phase3}), with the recovery-aware arm reaching the lowest NLL ($0.258$): the student, which had drifted off the teacher's high-probability region, is pulled back inside it. This is precisely the quantity the information-accounting view predicts distillation should reduce, and it is the one that behaves cleanly across all three arms.
+  \item \textbf{There exist teacher-irrecoverable regions.} Of the 32 shared bad prefixes the naive student produces, the 7B teacher \emph{itself} fails to continue to a correct answer from \textbf{all 32} under direct continuation. This is a mechanism result, not a failure: it says the collapse is not merely the student over-sharpening (which replay/KL/clip should fix), but the student entering states from which \emph{even the teacher does not directly recover}. Token-level regularization cannot reach this regime, which is why Phase 2's stabilizers did not move the entropy monitor.
+  \item \textbf{Accuracy and diversity are preserved, not destroyed.} pass@1 is $0.25$--$0.33$ across distilled arms (vs $0.33$ for the SFT start) and distinct-2 stays $0.68$--$0.70$ (vs $0.86$ for the start); the low-entropy regime in Phases 1--2 does not translate into a general loss of task performance or output variety. The honest caveat: completion on \emph{gold} prefixes drops from $0.75$ (start) to $0.4$--$0.67$ (distilled), and with 24 shared bad prefixes the arm-to-arm differences in recovery rate are within seed noise.
+\end{itemize}
+\begin{table}[h]
+\centering
+\caption{Phase 3 endpoints (stable schedule). off-policy NLL = mean teacher NLL of the student's continuations; pass1/passK on 24 GSM8K-train prompts; distinct-2 and self-overlap are trace-diversity statistics. \texttt{naive}/\texttt{stabilized}/\texttt{recovery} differ only in the stabilizer set and (for \texttt{recovery}) an offline recovery-SFT term built from teacher continuations of the student's bad prefixes.}
+\label{tab:phase3}
+\small
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+\textbf{checkpoint} & off-policy NLL & pass@1 & pass@K & distinct-2 & self-overlap \\
+\midrule
+SFT start        & 0.836 & 0.333 & 0.667 & 0.857 & 0.031 \\
+naive (s42)      & 0.335 & 0.250 & 0.417 & 0.684 & 0.156 \\
+stabilized (s42) & 0.299 & 0.333 & 0.500 & 0.699 & 0.139 \\
+recovery (s42)   & 0.258 & 0.188 & 0.438 & 0.669 & 0.161 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\noindent Taken together, Phase 3 shows that distillation reliably lowers off-policy NLL (the student returns to the teacher's support) while preserving task accuracy and trace diversity, \emph{and} it exposes a population of student-induced states that the teacher cannot recover from by direct continuation. The recovery-aware arm---trained with offline teacher-recovery supervision over exactly these bad prefixes (an online bad-state-detection $+$ in-loop teacher-generate variant OOM'd on the unified-memory GB10, so recovery pairs are generated offline by the 7B teacher alone)---reaches the lowest off-policy NLL of the three arms ($0.258$) with pass@K ($0.44$) at the stabilized level; on the 24-prefix recovery probe its recovery rate ($0.59$ mean over seeds) is statistically indistinguishable from naive and stabilized, consistent with the teacher-irrecoverable result above (much of the bad-state mass cannot be recovered by direct continuation from any arm). We read the recovery arm as confirming the mechanism localization (it improves the off-policy support metric where token-level stabilizers do not), while the recovery-rate probe stays null at this scale; a larger probe and a prefix-repair variant are specified in \S\ref{sec:future}.
+
+\subsection{Budget}
+Cost/time are reported as \emph{targets} (Table~\ref{tab:budget}) with the assumptions that drive them, not as achievements.
+
+\begin{table}[h]
+\centering
+\caption{Planning targets (assumption-dependent), to be replaced by measured values.}
+\label{tab:budget}
+\small
+\begin{adjustbox}{max width=\linewidth}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Item} & \textbf{Target (assumptions in \S\ref{sec:recipe})} \\
+\midrule
+GPU (A100-80G rented, $\sim$38\,h) & $\sim$\$110 \\
+Teacher inference (open-weight, rented) & $\sim$\$30 \\
+Total compute & $\lesssim$\$200 \\
+Wall-clock & $\sim$1 week (excl.\ corpus cleaning / benchmark build) \\
+OPD steps & $O(10^2)$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\subsection{Future work: corrected monitors and state-level endpoints}
+\label{sec:future}
+The negative and measurement results of \S\ref{sec:smallscale} point to a concrete next design, which we fix here so it is not left to post-hoc choice:
+\begin{enumerate}
+  \item \textbf{Identifiable entropy.} Replace last-position, single-prompt entropy with \emph{teacher-relative} sequence entropy: $\bar H_S(s)/\max(\bar H_T(s),\epsilon)$ computed over matched generated positions, and only at positions where the teacher itself is uncertain ($H_T>\eta$). A fixed $H_{min}$ threshold is abandoned.
+  \item \textbf{Behavior-level endpoints.} On a fixed probe set: pass@$k$, unique final answers, trace diversity (distinct-$n$, pairwise $n$-gram overlap), repetition rate, and output-length stability.
+  \item \textbf{Recovery test (the sequential collapse probe).} Given three prefix types---(i) a correct partial solution, (ii) a synthetic corruption of an intermediate value in a \emph{train-split} gold trace (question text untouched), and (iii) a student-produced erroneous prefix---measure the probability the model continues to a correct final answer. A collapse that token-level monitors miss should show up as reduced recovery on types (ii)/(iii) while type (i) stays intact.
+  \item \textbf{Recovery-aware training arms.} (a) State aggregation (DAgger-style): when the student visits a bad state, the teacher's \emph{continuation from that prefix} (validity-filtered) is SFT'd with a small weight; (b) state-adaptive KL: reverse-KL on recoverable states, forward-KL / recovery SFT on bad states; (c) a teacher-continuation \emph{diagnostic}: the fraction of student bad states from which even the 7B teacher cannot recover directly---a measure of teacher-irrecoverable regions.
+  \item \textbf{Hardware honesty.} Our box (GB10 unified memory, shared with other resident services) bounds the effective batch at $2$; we report this as a constraint. A follow-up at effective batch $\ge 32$ (grad-accumulation or a dedicated accelerator) is required before claiming any stabilizer's effect is settled.
+\end{enumerate}
+The personal-slice claims (P2/P6) remain pre-registered and are unaffected by the above: they are evaluated on the user's own task distribution, not on GSM8K.
+
+% ----------------------------- 8. LIMITATIONS -----------------------------
+\section{Limitations}
+\begin{itemize}
+  \item \textbf{Theory status.} The three principles are design rules; Eq.~\eqref{eq:accounting} is an informal accounting identity whose additive split is heuristic and whose residual $\rho$ can be large. Only the data-processing step is formally robust. A rigorous version would require a partial-information-decomposition treatment~\cite{dissanayake2024pid} and an explicit definition of the task variable $T$.
+  \item \textbf{Capacity-gap hypothesis.} $\kappa^\ast$/$o^\ast$ are treated as empirically estimable, not universal constants; the entropy-contraction claim is a tendency under stated conditions, not a monotonic guarantee in general policy spaces. Appendix~A is a plausibility sketch.
+  \item \textbf{Empirical status.} Two completed experiments, both labelled: (i) a \emph{synthetic} single-state mechanism check (\S\ref{sec:mech}); and (ii) a \emph{multi-seed, three-phase LLM-scale} study (\S\ref{sec:smallscale}) on one open-weight student--teacher family (Qwen2.5 1.5B$\leftarrow$7B), public GSM8K, effective batch 2, that confirms a measurable signature of the predicted information flow (off-policy NLL lowered $2.5$--$3\times$, task accuracy and trace diversity preserved) and localizes the residual collapse to teacher-irrecoverable states. Its negative findings are also part of the result: the capacity-gap token-level criterion (top-$k$ overlap; low-probability mass) is falsified as a leading indicator, the matched-compute ladder does not preserve endpoint token entropy, and last-position token entropy is \emph{non-identifiable} on this task. The recovery-aware arm reaches the lowest off-policy NLL but its recovery-rate gain does not clear seed noise on a 24-prefix probe; a larger probe and prefix-repair variants are specified in \S\ref{sec:future}. The personal-slice claims (P2/P6) remain to be executed.
+  \item \textbf{PersonalBench construct validity.} The personal-slice advantage is partly definitional (the baseline lacks the user's private $X$); we mitigate judge bias with position swapping and open-judge robustness checks, but the benchmark is inherently user-specific and not a general leaderboard.
+  \item \textbf{Cost/time.} ``One week, sub-\$200'' is an assumption-dependent target; corpus cleaning and benchmark construction commonly dominate and are excluded from the wall-clock target.
+  \item \textbf{Legal/ToS.} Commercial API terms change frequently and vary by provider; we avoid hard-dating them and use closed models only as evaluation baselines~\cite{tos}.
+  \item \textbf{Dual-use.} A private, personalized, lightly-filtered model raises alignment concerns; persona anchoring must not become a jailbreak vector. Scope is the owner's own data and self-use.
+\end{itemize}
+
+% ----------------------------- 9. CONCLUSION -----------------------------
+\section{Conclusion}
+We reframed distillation as rate-limited function estimation under an information-accounting budget, articulated three operational principles and a measurable capacity-gap hypothesis, and turned them into a concrete, legal personal-model recipe with a pre-registered protocol. The framework's signature prediction is \emph{dual}: a small private student can match a closed frontier model \textbf{on a user-specific slice that requires the user's own data}, while \textbf{remaining below it on general intelligence}. We then put the framework to its first empirical test on real open-weight models (\S\ref{sec:smallscale}); the study yields three findings. It \emph{confirms} a measurable signature of the predicted information flow: distillation pulls the student back into the teacher's support (off-policy NLL down $\sim$2.5$\times$) while preserving task accuracy and trace diversity. It \emph{localizes} the residual collapse to a population of student-induced states from which the teacher does not recover by direct continuation---a teacher-irrecoverable regime that explains, rather than contradicts, the reverse-KL contraction mechanism the synthetic check isolates. And it \emph{corrects} our instruments: top-$k$ overlap and teacher-low-probability mass are falsified as token-level leading indicators, and last-position token entropy is shown to be non-identifiable on low-conditional-entropy tasks; the corrected, behavior- and state-level endpoints (pass@$k$, trace diversity, off-policy recovery) together with a recovery-aware training arm are now specified with their own pre-registered arms (\S\ref{sec:future}). The personal-slice claims (P2/P6) remain the open empirical question the recipe was built to answer. Pure distillation creates no new task information beyond the teacher signal, the student's prior, the data distribution, and any verifier/environment channel; the practical art---and the entire personal and commercial opportunity---is deciding \emph{which} information to acquire, from \emph{whom}, at \emph{what} exchange rate, and \emph{when to stop}.
+
+% ----------------------------- AI USE & AUTHORSHIP DISCLOSURE -----------------------------
+\section*{AI Use and Authorship Disclosure}
+This manuscript has a single human author. The author used general-purpose
+large language model tooling for drafting and for running and interpreting
+the experiments; no generative system is listed as a co-author. The personal
+model \texttt{qwen3.8-27B-dyl} (\S\ref{sec:recipe}) is the \emph{target
+system} that the paper's recipe specifies how to build---a research subject
+of the work, not an author of it. Every measurement in
+\S\ref{sec:mech}--\S\ref{sec:smallscale} was produced by the author's own
+runs on a single DGX Spark and is reported without fabrication, including the
+null and negative results on the top-$k$-overlap and low-probability-mass
+leading-indicator claims and on the matched-compute ladder.
+
+% ----------------------------- REFERENCES -----------------------------
+% Categorized per reviewer guidance via inline tags:
+%   [A] peer-reviewed / arXiv   [B] technical reports
+%   [C] blog posts (practical context only; NOT load-bearing for any claim)
+%   [D] legal / ToS (live documents; version as of writing)
+\begin{thebibliography}{99}\footnotesize
+
+\bibitem{hinton2015} \textbf{[A]} Hinton, Vinyals, Dean. Distilling the Knowledge in a Neural Network. \emph{NeurIPS DL Workshop}, 2015. arXiv:1503.02531.
+\bibitem{kim2016seqkd} \textbf{[A]} Kim, Rush. Sequence-Level Knowledge Distillation. \emph{EMNLP}, 2016.
+\bibitem{lopezpaz2015} \textbf{[A]} Lopez-Paz, Bottou, Sch\"olkopf, Vapnik. Unifying Distillation and Privileged Information. \emph{ICLR}, 2016.
+\bibitem{gu2023minillm} \textbf{[A]} Gu et al. MiniLLM: Knowledge Distillation of Large Language Models. \emph{ICLR}, 2024. arXiv:2306.08543.
+\bibitem{agarwal2023gkd} \textbf{[A]} Agarwal et al. On-Policy Distillation of Language Models (GKD). \emph{ICLR}, 2024.
+\bibitem{rafailov2023dpo} \textbf{[A]} Rafailov et al. Direct Preference Optimization. \emph{NeurIPS}, 2023.
+\bibitem{lewis2020rag} \textbf{[A]} Lewis et al. Retrieval-Augmented Generation for Knowledge-Intensive NLP. \emph{NeurIPS}, 2020.
+\bibitem{dettmers2023qlora} \textbf{[A]} Dettmers et al. QLoRA: Efficient Finetuning of Quantized LLMs. \emph{NeurIPS}, 2023.
+\bibitem{ilharco2023task} \textbf{[A]} Ilharco et al. Task Arithmetic in the Edit Space. \emph{ICLR}, 2023.
+\bibitem{yadav2023ties} \textbf{[A]} Yadav et al. TIES-Merging. \emph{NeurIPS}, 2023.
+\bibitem{packer2023memgpt} \textbf{[A]} Packer et al. MemGPT. 2023. arXiv:2310.08560.
+\bibitem{sumers2023coala} \textbf{[A]} Sumers et al. Cognitive Architectures for Language Agents (CoALA). 2023.
+\bibitem{dissanayake2024pid} \textbf{[A]} Dissanayake et al. Quantifying Knowledge Distillation using Partial Information Decomposition. 2024. arXiv:2411.07483.
+\bibitem{zhang2025bias} \textbf{[A]} Zhang et al. Can Students Surpass the Teacher? Distilling Knowledge from Teacher's Bias. \emph{AAAI}, 2025.
+\bibitem{tan2024peft} \textbf{[A]} Tan et al. One PEFT per User. 2024.
+\bibitem{maiya2025character} \textbf{[A]} Maiya et al. Open Character Training: Shaping the Persona of AI Assistants through Constitutional AI. 2025. \emph{[verify venue/metadata]}
+\bibitem{luccioli2025budget} \textbf{[A]} Luccioli et al. LLM on a Budget: Active Knowledge Distillation. \emph{FEDS 2025-108}, 2025.
+\bibitem{elad2025} \textbf{[A]} ELAD: Explanation-Guided LLMs Active Distillation. \emph{OpenReview}, 2025. \emph{[verify metadata]}
+\bibitem{gad2025} \textbf{[A]} Generative Adversarial Distillation (GAD): Black-Box On-Policy Distillation of LLMs. 2025. arXiv:2511.10643. \emph{[verify]}
+\bibitem{bridge2025} \textbf{[A]} BRIDGE: Budget-aware Reasoning via Intermediate Distillation with Guided Examples. 2025. arXiv:2512.20403. \emph{[verify]}
+\bibitem{mem0} \textbf{[A]} Mem0: A Semantic Memory Layer for LLM Agents. 2025. \emph{[verify metadata]}
+\bibitem{amem2025} \textbf{[A]} A-MEM: Agentic Memory with Zettelkasten-style Dynamic Linking. 2025. \emph{[verify metadata]}
+\bibitem{ragft2025} \textbf{[C]} RAG vs Fine-Tuning: practitioner surveys on knowledge injection vs behavior shaping. 2025. \emph{[secondary; not load-bearing]}
+\bibitem{forget2025} \textbf{[A]} Catastrophic forgetting in LLM fine-tuning and LoRA/replay mitigations (e.g.\ hierarchical importance regularization; OPLoRA). 2025. \emph{[verify metadata]}
+\bibitem{deepseekr1} \textbf{[B]} DeepSeek-AI. DeepSeek-R1 Technical Report. 2025.
+\bibitem{qwen3} \textbf{[B]} Qwen Team. Qwen3 Technical Report. 2025. arXiv:2505.09388.
+\bibitem{lu2025opd} \textbf{[C]} Lu, K. \& Thinking Machines Lab. On-Policy Distillation. \emph{Connectionism}, Oct 2025. \url{https://thinkingmachines.ai/blog/on-policy-distillation}
+\bibitem{tos} \textbf{[D]} Provider service terms restricting use of model outputs to train competing models (OpenAI Services Agreement; Anthropic Commercial Terms; Google Gemini API Additional Terms). Terms are revised frequently; consult the live pages. As of writing, the OpenAI service-terms page shows a last-update of 2026-09-10. \url{https://openai.com/policies/service-terms/}
+
+\end{thebibliography}
+
+\noindent\emph{Citation hygiene note (per reviewer guidance): entries tagged \texttt{[verify]} are 2025--2026 preprints whose complete metadata must be confirmed before submission; entries tagged \textbf{[C]} are blog/practitioner sources cited for context only, and no theoretical claim in this paper rests on them.}
+
+% ----------------------------- APPENDIX -----------------------------
+\appendix
+\section{Plausibility sketch for Hypothesis~\ref{hyp:collapse}}
+Consider the per-token reverse-KL policy-gradient term at a student-visited state $s_t$ and token $v$, proportional to $\pi_\theta(v\mid s_t)\big[\log\pi_\theta(v\mid s_t)-\log\pi_T(v\mid s_t)\big]$. When the overlap $o_t$ is small, the student places non-trivial mass on tokens with $\pi_T(v\mid s_t)\to 0$, so $-\log\pi_T$ is large and the bracket is dominated by a penalty that is roughly \emph{independent} of $\log\pi_\theta$ on those tokens. The descent direction then reduces $\pi_\theta(v\mid s_t)$ precisely on the teacher-disfavored tokens---contracting the support of $\pi_\theta$ and, empirically, its entropy. Keeping every ladder rung at $o_t\ge o^\ast$ retains a non-degenerate $\log\pi_\theta$ dependence in the bracket, which we expect to preserve entropy. This is a mechanism sketch under stated assumptions, not a general proof: the magnitude of the effect depends on temperature, tokenizer overlap, loss form, and optimizer, which is why we treat $\kappa^\ast$/$o^\ast$ as estimable and commit to measuring the entropy--overlap relationship rather than asserting it. $\square$
+
+\end{document}

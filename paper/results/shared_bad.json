@@ -1,0 +1,660 @@
+[
+ {
+  "q": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+  "gold": "72",
+  "prefix": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?\nA:  60\nB: 72\nC: 96\nD: 120\n\nTo determine the total number of clips Natalia sold in April and May, we need to follow these steps:\n\n1. Identify the number of clips sold in April.\n   - Natalia sold 48 clips in April.\n\n2. Calculate the number of clips so",
+  "nll": 0.25,
+  "wrong": 1
+ },
+ {
+  "q": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+  "gold": "72",
+  "prefix": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?\nA:  68\nB: 32\nC: 50\nD: 192 To determine the total number of clips Natalia sold in April and May, we need to follow these steps:\n\n1. Calculate the number of clips sold in May.\n2. Add the number of clips sold in April and May together.\n\nFirst, we know that Natalia ",
+  "nll": 0.559,
+  "wrong": 1
+ },
+ {
+  "q": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+  "gold": "72",
+  "prefix": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?\nA:  32\nB: 60\nC: 75\nD:\n\nTo determine the total number of clips Natalia sold in April and May, we need to follow these steps:\n\n1. Identify the number of clips sold in April.\n   - According to the problem, Natalia sold 48 clips in April.\n\n2. Calculate the number of clips ",
+  "nll": 0.365,
+  "wrong": 1
+ },
+ {
+  "q": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?",
+  "gold": "72",
+  "prefix": "Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?\nA:  24\nB: 40\nC: 60\nD: 96 To determine the total number of clips Natalia sold in April and May, we need to follow these steps:\n\n1. Identify the number of clips sold in April.\n   - According to the problem, Natalia sold 48 clips in April.\n\n2. Calculate the number of clips",
+  "nll": 0.344,
+  "wrong": 1
+ },
+ {
+  "q": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+  "gold": "10",
+  "prefix": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $4  \nB: $6  \nC: $7.2  \nD: $8\n\nTo determine how much Weng earned from babysitting, we need to follow these steps:\n\n1. Identify the hourly wage and the time spent on babysitting.\n2. Convert the time spent into hours.\n3. Calculate the earnings by multiplying the hourly wage by the number",
+  "nll": 0.75,
+  "wrong": 1
+ },
+ {
+  "q": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+  "gold": "10",
+  "prefix": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $4\nB: $6\nC: $9\nD: $8 To determine how much Weng earned from babysitting, we need to follow these steps:\n\n1. Identify the hourly rate and the time worked.\n2. Convert the time worked from minutes to hours since the hourly rate is given in dollars per hour.\n\nThe hourly rate is $12 per hour",
+  "nll": 0.664,
+  "wrong": 1
+ },
+ {
+  "q": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+  "gold": "10",
+  "prefix": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $6\nB: $18\nC: $36\nD: $72 To determine how much Weng earned from doing 50 minutes of babysitting at a rate of $12 per hour, we need to follow these steps:\n\n1. **Convert the time from minutes to hours**: \n   Since there a",
+  "nll": 0.516,
+  "wrong": 1
+ },
+ {
+  "q": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?",
+  "gold": "10",
+  "prefix": "Weng earns $12 an hour for babysitting. Yesterday, she just did 50 minutes of babysitting. How much did she earn?\nA:  $2$\nB: $3$\nC: $4$\nD: $5$\n\nTo determine how much Weng earned for babysitting for 50 minutes yesterday, we need to follow these steps:\n\n1. Convert the time from minutes to hours. Since there are 60 minutes in an hour, we divide 50 by 60",
+  "nll": 0.559,
+  "wrong": 1
+ },
+ {
+  "q": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+  "gold": "5",
+  "prefix": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?\nA:  $5\nB: $10\nC: $15\nD: $20\n\nTo determine how much more money Betty needs to buy the wallet, we can follow these steps:\n\n1. Calculate the amount of money Betty currently has.\n   Since the wallet costs $100 and Betty has only half of it, she currently has:\n   \\[\n   \\fr",
+  "nll": 0.25,
+  "wrong": 1
+ },
+ {
+  "q": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+  "gold": "5",
+  "prefix": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?\nA:  5\nB: 10\nC: 15\nD: 20\n\nTo determine how much more money Betty needs to buy the wallet, we can follow these steps:\n\n1. Determine how much money Betty currently has.\n2. Calculate how much money her grandparents have given her.\n3. Find out the total amount of money Betty now has after receiving contributions from both her",
+  "nll": 0.508,
+  "wrong": 1
+ },
+ {
+  "q": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+  "gold": "5",
+  "prefix": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?\nA:  25\nB: 30\nC: 20\nD: 40\n\nTo determine how much more money Betty needs to buy the wallet, we will follow these steps:\n\n1. Calculate the total amount of money Betty currently has.\n2. Determine how much money her parents have given her.\n3. Determine how much money her grandparents have given her.\n4. Find out how mu",
+  "nll": 0.715,
+  "wrong": 1
+ },
+ {
+  "q": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?",
+  "gold": "5",
+  "prefix": "Betty is saving money for a new wallet which costs $100. Betty has only half of the money she needs. Her parents decided to give her $15 for that purpose, and her grandparents twice as much as her parents. How much more money does Betty need to buy the wallet?\nA:  $5\nB: $10\nC: $15\nD: $20\n\nTo determine how much more money Betty needs to buy the wallet, we can break down the problem step by step.\n\nFirst, let's find out how much money Betty currently has. The wallet costs $100, and Betty already has half of t",
+  "nll": 0.52,
+  "wrong": 1
+ },
+ {
+  "q": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+  "gold": "42",
+  "prefix": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?\nA:  24\nB: 36\nC: 48\nD: 60 To determine how many pages Julie should read tomorrow, we need to follow these steps:\n\n1. Calculate the number of pages Julie read today.\n2. Determine the total number of pages she has read so far (yesterday + today).\n3. Find out how many pages remain unread after yesterday's a",
+  "nll": 0.566,
+  "wrong": 1
+ },
+ {
+  "q": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+  "gold": "42",
+  "prefix": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?\nA:  24\n\nB: 36\n\nC: 48\n\nD: 60\n\nTo determine how many pages Julie should read tomorrow, we need to follow these steps:\n\n1. Calculate the number of pages Julie has read so far.\n2. Determine the remaining pages in the book.\n3. Calculate half of the remaining pages.\n\nFirst, let's find ou",
+  "nll": 0.531,
+  "wrong": 1
+ },
+ {
+  "q": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+  "gold": "42",
+  "prefix": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?\nA:  3\nB: 6\nC: 9\nD: 12\n\nTo determine how many pages Julie should read tomorrow, we need to follow these steps:\n\n1. Calculate the number of pages Julie read today.\n2. Determine the total number of pages Julie has read so far.\n3. Find out how many pages are left for her to read.\n4. Determine how many pag",
+  "nll": 0.479,
+  "wrong": 1
+ },
+ {
+  "q": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?",
+  "gold": "42",
+  "prefix": "Julie is reading a 120-page book. Yesterday, she was able to read 12 pages and today, she read twice as many pages as yesterday. If she wants to read half of the remaining pages tomorrow, how many pages should she read?\nA:  18\nB: 36\nC: 24\nD:\n\nTo determine how many pages Julie should read tomorrow, we need to follow these steps:\n\n1. Calculate the number of pages Julie read today.\n2. Determine the total number of pages Julie has read so far.\n3. Find out how many pages are left for her to read.\n4. Calculate the n",
+  "nll": 0.336,
+  "wrong": 1
+ },
+ {
+  "q": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+  "gold": "624",
+  "prefix": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?\nA:  160\nB: 480\nC: 960\nD: 576\n\nTo determine how many pages James writes in a year, we need to break down the problem into smaller steps.\n\nFirst, let's calculate how many pages James writes in one day:\n- He writes 3 pages for each friend.\n- There are ",
+  "nll": 0.918,
+  "wrong": 1
+ },
+ {
+  "q": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+  "gold": "624",
+  "prefix": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?\nA:  60\nB: 180\nC: 720\nD:\n\nTo determine how many pages James writes in a year, we need to break down the problem step by step.\n\n1. **Calculate the number of letters written per week:**\n   - James writes 3-page letters to each of his 2 friends.\n   - Therefore, the total ",
+  "nll": 0.738,
+  "wrong": 1
+ },
+ {
+  "q": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+  "gold": "624",
+  "prefix": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?\nA:  1440\nB: 576\nC: 180\nD: 90\n\nTo determine how many pages James writes in a year, we need to break down the problem step by step.\n\nFirst, let's find out how many pages James writes each time he writes a letter:\n- He writes a 3-page letter to 2 different f",
+  "nll": 0.633,
+  "wrong": 1
+ },
+ {
+  "q": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?",
+  "gold": "624",
+  "prefix": "James writes a 3-page letter to 2 different friends twice a week.  How many pages does he write a year?\nA:  160\nB: 240\nC: 960\nD: 480 To determine how many pages James writes in a year, we need to break down the problem step by step.\n\nFirst, let's calculate the number of pages James writes each time he writes a letter:\n- James writes a 3-page letter.\n- He sends th",
+  "nll": 0.754,
+  "wrong": 1
+ },
+ {
+  "q": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?",
+  "gold": "35",
+  "prefix": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?\nA:  60  \nB: 75  \nC: 85  \nD: 95\n\nTo determine the total number of flowers in Mark's garden, we need to calculate the number of each type of flower step by step.\n\n1. **Calculate the number of purple flowers:**\n   The problem states that there are 80% more purple flowers tha",
+  "nll": 0.508,
+  "wrong": 1
+ },
+ {
+  "q": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?",
+  "gold": "35",
+  "prefix": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?\nA:  60\nB: 70\nC: 90\nD: 100\n\nTo determine the total number of flowers in Mark's garden, we need to calculate the number of each type of flower step by step.\n\nFirst, let's find out how many purple flowers there are. We know that there are 80% more purple ",
+  "nll": 0.332,
+  "wrong": 1
+ },
+ {
+  "q": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?",
+  "gold": "35",
+  "prefix": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?\nA:  36  \nB: 40  \nC: 46  \nD: 48\n\nTo determine the total number of flowers in Mark's garden, we need to calculate the number of each type of flower step by step.\n\n1. **Number of Yellow Flowers:**\n   Mark has 10 yellow flowers.\n   \n2. **Number of Purple Flowers:**\n ",
+  "nll": 0.531,
+  "wrong": 1
+ },
+ {
+  "q": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?",
+  "gold": "35",
+  "prefix": "Mark has a garden with flowers. He planted plants of three different colors in it. Ten of them are yellow, and there are 80% more of those in purple. There are only 25% as many green flowers as there are yellow and purple flowers. How many flowers does Mark have in his garden?\nA:  16  \nB: 34  \nC: 97  \nD: 120 To determine the total number of flowers in Mark's garden, we need to calculate the number of each type of flower step by step.\n\nFirst, let's find out how many purple flowers there are. We know that there are 10 yellow flow",
+  "nll": 0.59,
+  "wrong": 1
+ },
+ {
+  "q": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?",
+  "gold": "48",
+  "prefix": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?\nA:  48\nB: 72\nC: 96\nD: 144\n\nTo determine the total number of pizza slices Albert eats, we need to follow these steps:\n\n1. Calculate the total number of slices from the large pizzas.\n2. Calculate the total number of slices from the small pizzas.\n3. Add the two quantities together to get the total number of sli",
+  "nll": 0.322,
+  "wrong": 1
+ },
+ {
+  "q": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?",
+  "gold": "48",
+  "prefix": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?\nA:  70\nB: 52\nC: 48\nD:\n\nTo determine how many slices of pizza Albert eats in one day, we need to calculate the total number of slices from both large and small pizzas.\n\nFirst, let's find out how many slices are in the large pizzas:\n- Each large pizza has 16 slices.\n- Albe",
+  "nll": 0.453,
+  "wrong": 1
+ },
+ {
+  "q": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?",
+  "gold": "48",
+  "prefix": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?\nA:  32\nB: 48\nC: 56\nD: 96 To determine the total number of pizza slices Albert eats, we need to calculate the number of slices from both the large pizzas and the small pizzas separately, and then sum them up.\n\nFirst, let's find out how many slices are in the 2 large pizzas:\n- ",
+  "nll": 0.389,
+  "wrong": 1
+ },
+ {
+  "q": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?",
+  "gold": "48",
+  "prefix": "Albert is wondering how much pizza he can eat in one day. He buys 2 large pizzas and 2 small pizzas. A large pizza has 16 slices and a small pizza has 8 slices. If he eats it all, how many pieces does he eat that day?\nA:  48\nB: 64\nC: 96\nD: 100 To determine the total number of pizza slices Albert eats in one day, we need to calculate the number of slices from both the large pizzas and the small pizzas separately and then sum them up.\n\nFirst, let's calculate the number of slices from the large ",
+  "nll": 0.412,
+  "wrong": 1
+ },
+ {
+  "q": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?",
+  "gold": "16",
+  "prefix": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?\nA:  4\nB: 8\nC: 12\nD: 16\nE: 20\n\nTo determine the final weight of the box of goodies, we need to follow each step carefully and calculate the weight incrementally.\n\n1. **Initial Weight**: The initial weight of the box is 2 pounds.\n   \\[\n   \\text{Initial weight} = ",
+  "nll": 0.609,
+  "wrong": 1
+ },
+ {
+  "q": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?",
+  "gold": "16",
+  "prefix": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?\nA:  8 B: 10 C: 14 D: 16\n\nTo determine the final weight of the box of goodies, we need to follow each step carefully and calculate the total weight after each addition.\n\n1. **Initial Weight**: The box starts with an unknown initial weight.\n2. **Jelly Beans Addition**: Ken adds jelly bean",
+  "nll": 0.754,
+  "wrong": 1
+ },
+ {
+  "q": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?",
+  "gold": "16",
+  "prefix": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?\nA:  10\nB: 8\nC: 9\nD: 7\nE: 6\n\nTo determine the final weight of the box of goodies, we need to follow each step carefully and keep track of the changes in weight.\n\n1. **Initial weight**: The box starts with no weight.\n   \\[\n   \\text{Weight} = 0\n   \\",
+  "nll": 0.578,
+  "wrong": 1
+ },
+ {
+  "q": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?",
+  "gold": "16",
+  "prefix": "Ken created a care package to send to his brother, who was away at boarding school.  Ken placed a box on a scale, and then he poured into the box enough jelly beans to bring the weight to 2 pounds.  Then, he added enough brownies to cause the weight to triple.  Next, he added another 2 pounds of jelly beans.  And finally, he added enough gummy worms to double the weight once again.  What was the final weight of the box of goodies, in pounds?\nA:  10\nB: 24\nC: 38\nD: 52\nE: 66 To determine the final weight of the box of goodies, we need to follow each step of the process and calculate the weight after each addition.\n\n1. **Initial Weight**: The initial weight is give",
+  "nll": 0.836,
+  "wrong": 1
+ },
+ {
+  "q": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+  "gold": "41",
+  "prefix": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?\nA:  $9  \nB: $11  \nC: $15  \nD: $17 To determine how much Alexis paid for the shoes, we need to follow these steps:\n\n1. Calculate the total amount spent by Alexis on all items except the shoes.\n2. Subtract this amount from her initial budget to find out how much she had left after making those purchas",
+  "nll": 0.926,
+  "wrong": 1
+ },
+ {
+  "q": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+  "gold": "41",
+  "prefix": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?\nA:  $2  \nB: $9  \nC: $11  \nD: $17 To determine how much Alexis paid for the shoes, we need to follow these steps:\n\n1. Calculate the total amount spent on the items that have receipts.\n2. Subtract this total from her initial budget to find out how much she had left before purchasing the shoes.\n3. A",
+  "nll": 0.84,
+  "wrong": 1
+ },
+ {
+  "q": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+  "gold": "41",
+  "prefix": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?\nA:  $7\nB: $9\nC: $11\nD: $13\n\nTo determine how much Alexis paid for the shoes, we need to calculate the total amount she initially had in her budget and subtract the amounts she spent on other items.\n\nFirst, let's find out how much Alexis had before going shopping:\n\\[",
+  "nll": 0.855,
+  "wrong": 1
+ },
+ {
+  "q": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?",
+  "gold": "41",
+  "prefix": "Alexis is applying for a new job and bought a new set of business clothes to wear to the interview. She went to a department store with a budget of $200 and spent $30 on a button-up shirt, $46 on suit pants, $38 on a suit coat, $11 on socks, and $18 on a belt. She also purchased a pair of shoes, but lost the receipt for them. She has $16 left from her budget. How much did Alexis pay for the shoes?\nA:  $5\nB: $19\nC: $17\nD: $16\n\nTo determine how much Alexis paid for the shoes, we need to calculate the total amount she initially had in her budget and then subtract the amounts she spent on other items.\n\nFirst, let's add up all the expenses:\n\n\\[\n\\text{Total e",
+  "nll": 0.914,
+  "wrong": 1
+ },
+ {
+  "q": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?",
+  "gold": "990",
+  "prefix": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?\nA:  $960\nB: $1,000\nC: $1,040\nD: $1,200\n\nTo determine how much Tina makes over the course of 5 days, we need to break down her earnings into regular pay and overtime pay.\n\nFirst, let's calculate the total number of hours Tina works in a ",
+  "nll": 1.062,
+  "wrong": 1
+ },
+ {
+  "q": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?",
+  "gold": "990",
+  "prefix": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?\nA:  $960\nB: $1,040\nC: $1,080\nD: $1,360\n\nTo determine how much money Tina makes in a week, we need to calculate her earnings from both regular hours and overtime hours.\n\nFirst, let's calculate her regular pay:\n- Regular hours: ",
+  "nll": 0.859,
+  "wrong": 1
+ },
+ {
+  "q": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?",
+  "gold": "990",
+  "prefix": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?\nA:  $960 B: $1,080 C: $1,200 D: $1,440\n\nTo determine Tina's total earnings, we need to calculate her regular pay and her overtime pay separately, and then sum them up.\n\nFirst, let's calculate the number of regular hours and the number of overtime hours in a single workday:\n- Regul",
+  "nll": 0.871,
+  "wrong": 1
+ },
+ {
+  "q": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?",
+  "gold": "990",
+  "prefix": "Tina makes $18.00 an hour.  If she works more than 8 hours per shift, she is eligible for overtime, which is paid by your hourly wage + 1/2 your hourly wage.  If she works 10 hours every day for 5 days, how much money does she make?\nA:  $960\nB: $1,040\nC: $1,080\nD: $1,140 To determine Tina's total earnings, we need to calculate her pay both at her regular rate and any overtime rates. Let's break it down step-by-step.\n\nFirst, let's identify the components of her daily earnings:\n1. Her b",
+  "nll": 1.422,
+  "wrong": 1
+ },
+ {
+  "q": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?",
+  "gold": "121",
+  "prefix": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?\nA:  105  \nB: 210  \nC: 315  \nD: 630\n\nLet's denote the number of people on the ship eaten by the monster in the first century as \\( x \\). According to the problem, each subsequent ship has twice as many people as the previous one. Therefore, the ships eaten by the monster in subsequent ce",
+  "nll": 0.758,
+  "wrong": 1
+ },
+ {
+  "q": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?",
+  "gold": "121",
+  "prefix": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?\nA:  20  \nB: 35  \nC: 56  \nD: 112\nLet's denote the number of people on the ship the monster ate in the first hundred years as \\( x \\). Since each subsequent ship has twice as many people as the previous one, the number of people on the ships eaten in the second and third centuries can be expressed a",
+  "nll": 0.77,
+  "wrong": 1
+ },
+ {
+  "q": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?",
+  "gold": "121",
+  "prefix": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?\nA:  53\nB: 209\nC: 168\nD: 131\n\nTo determine how many people were on the ship that the monster ate in the first hundred years, we need to analyze the pattern of ship capacities. The problem states that each new ship has twice as many people as the previous one. Let's denote the number of",
+  "nll": 0.938,
+  "wrong": 1
+ },
+ {
+  "q": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?",
+  "gold": "121",
+  "prefix": "A deep-sea monster rises from the waters once every hundred years to feast on a ship and sate its hunger. Over three hundred years, it has consumed 847 people. Ships have been built larger over time, so each new ship has twice as many people as the last ship. How many people were on the ship the monster ate in the first hundred years?\nA:  12  \nB: 30  \nC: 45  \nD: 60\n\nTo solve this problem, we need to determine the number of people on the ship that was eaten by the deep-sea monster in the first hundred years. Let's denote the number of people on the first ship by \\( x \\).\n\nSince each subsequent ship has twice as many pe",
+  "nll": 0.645,
+  "wrong": 1
+ },
+ {
+  "q": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?",
+  "gold": "5",
+  "prefix": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?\nA:  3\nB: 6\nC: 12\nD: 8\n\nTo determine how many driveways Tobias shoveled, we need to follow these steps:\n\n1. Calculate the total amount of money Tobias had before buying the shoes.\n2. Subtract the cost of the shoes from this total to find out how much money he had initially.\n\nFirst, let's calcula",
+  "nll": 0.699,
+  "wrong": 1
+ },
+ {
+  "q": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?",
+  "gold": "5",
+  "prefix": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?\nA:  2\nB: 3\nC: 4\nD: 6\n\nTo determine how many driveways Tobias shoveled, we need to calculate the total amount of money he saved over the past three months and then see if this amount plus the money from mowing lawns equals $100 (since he had $15 left after buying the shoes).\n\nFirst, le",
+  "nll": 0.578,
+  "wrong": 1
+ },
+ {
+  "q": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?",
+  "gold": "5",
+  "prefix": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?\nA:  2\nB: 3\nC: 4\nD: 5\n\nLet's calculate Tobias' total savings step by step.\n\nFirst, let's determine how much money Tobias saved from his allowance over the three months:\n\\[ \\text{Money from allowance} = 3 \\times 5 = 15 \\text{ dollars} \\]\n\nNext, we nee",
+  "nll": 0.477,
+  "wrong": 1
+ },
+ {
+  "q": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?",
+  "gold": "5",
+  "prefix": "Tobias is buying a new pair of shoes that costs $95. He has been saving up his money each month for the past three months. He gets a $5 allowance a month. He also mows lawns and shovels driveways. He charges $15 to mow a lawn and $7 to shovel. After buying the shoes, he has $15 in change. If he mows 4 lawns, how many driveways did he shovel?\nA:  2\nB: 3\nC: 4\nD: 5 To determine how many driveways Tobias shoveled, we need to calculate the total amount of money he saved over the past three months and then figure out how much money he spent on mowing lawns and what proportion of that money came from shoveling driveways.\n\nFirst, let's calcul",
+  "nll": 0.668,
+  "wrong": 1
+ },
+ {
+  "q": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?",
+  "gold": "85",
+  "prefix": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?\nA:  135\nB: 125\nC: 115\nD: 105\n\nTo determine the total number of trees on Randy's farm, we need to follow these steps:\n\n1. Identify the number of mango trees.\n2. Calculate the number of coconut trees based on the number of mango trees.\n3. Add the number of mango trees and coconut trees togethe",
+  "nll": 0.311,
+  "wrong": 1
+ },
+ {
+  "q": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?",
+  "gold": "85",
+  "prefix": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?\nA:  105\nB: 110\nC: 115\nD: 120\n\nTo determine the total number of trees on Randy's farm, we need to follow these steps:\n\n1. Identify the number of mango trees.\n2. Calculate the number of coconut trees based on the information given.\n3. Add the number of mango trees and coc",
+  "nll": 0.311,
+  "wrong": 1
+ },
+ {
+  "q": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?",
+  "gold": "85",
+  "prefix": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?\nA:  93\nB: 108\nC: 120\nD: 135 To determine the total number of trees on Randy's farm, we need to calculate the number of coconut trees and then add it to the number of mango trees.\n\nFirst, let's find out how many coconut trees Randy has. The problem states that Randy has 5 less",
+  "nll": 0.389,
+  "wrong": 1
+ },
+ {
+  "q": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?",
+  "gold": "85",
+  "prefix": "Randy has 60 mango trees on his farm. He also has 5 less than half as many coconut trees as mango trees. How many trees does Randy have in all on his farm?\nA:  125\nB: 135\nC: 145\nD: 155\n\nTo determine the total number of trees on Randy's farm, we need to follow these steps:\n\n1. Identify the number of mango trees.\n2. Calculate the number of coconut trees based on the given relationship.\n3. Add the number of mango trees and coconut trees together.\n\nLet's star",
+  "nll": 0.268,
+  "wrong": 1
+ },
+ {
+  "q": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?",
+  "gold": "35",
+  "prefix": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?\nA:  $36\nB: $48\nC: $50\nD: $30\n\nTo determine how much Jasper spends on the ingredients, we need to calculate the cost of each item separately and then sum them up.\n\nFirst, let's find the cost of the cheddar cheese:\n- The cost of 2 pounds of cheddar cheese",
+  "nll": 0.609,
+  "wrong": 1
+ },
+ {
+  "q": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?",
+  "gold": "35",
+  "prefix": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?\nA:  $30\nB: $45\nC: $60\nD: $75\n\nTo determine how much Jasper spends on the ingredients, we need to calculate the cost of each type of food item separately and then sum them up.\n\n1. **Calculate the cost of the cheddar cheese:**\n   The problem states that 2 pounds of cheddar chees",
+  "nll": 0.535,
+  "wrong": 1
+ },
+ {
+  "q": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?",
+  "gold": "35",
+  "prefix": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?\nA:  $40\nB: $60\nC: $70\nD: $80\n\nTo determine how much Jasper spends on the ingredients, we need to calculate the cost of each type of ingredient separately and then sum them up.\n\nFirst, let's find the cost of the cheddar cheese:\n- The cheddar cheese costs $10.\n- So, the cost of the c",
+  "nll": 0.633,
+  "wrong": 1
+ },
+ {
+  "q": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?",
+  "gold": "35",
+  "prefix": "Jasper will serve charcuterie at his dinner party. He buys 2 pounds of cheddar cheese for $10, a pound of cream cheese that cost half the price of the cheddar cheese, and a pack of cold cuts that cost twice the price of the cheddar cheese. How much does he spend on the ingredients?\nA:  $30\nB: $40\nC: $50\nD: $60\n\nTo determine how much Jasper spends on the ingredients, we need to calculate the cost of each item separately and then sum them up.\n\nFirst, let's find the cost of the cheddar cheese:\nThe cost of the cheddar cheese is given as $10.\nSo, the cost of the ch",
+  "nll": 0.373,
+  "wrong": 1
+ },
+ {
+  "q": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?",
+  "gold": "5",
+  "prefix": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?\nA:  3\nB: 4\nC: 5\nD: 6\n\nTo determine how long it will take Joy to read 120 pages, we first need to find out her reading rate and then use that rate to calculate the time required for the given number of pages.\n\nStep 1: Calculate Joy's reading rate",
+  "nll": 0.312,
+  "wrong": 1
+ },
+ {
+  "q": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?",
+  "gold": "5",
+  "prefix": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?\nA:  $3$\nB: $4$\nC: $5$\nD: $6$\n\nTo determine how long it will take for Joy to read 120 pages, we start by calculating her reading rate. We know that she reads 8 pages in 20 minutes.\n\nFirst, we find out how many pages she reads per minute:\n\\[\n\\tex",
+  "nll": 0.633,
+  "wrong": 1
+ },
+ {
+  "q": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?",
+  "gold": "5",
+  "prefix": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?\nA:  3\nB: $\\frac{5}{4}$\nC: $1\\frac{1}{4}$\nD: $3\\frac{1}{4}$\n\nTo determine how long it will take for Joy to read 120 pages, we need to follow these steps:\n\n1. **Calculate the reading rate**: First, we find out how many pages Joy rea",
+  "nll": 0.578,
+  "wrong": 1
+ },
+ {
+  "q": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?",
+  "gold": "5",
+  "prefix": "Joy can read 8 pages of a book in 20 minutes. How many hours will it take her to read 120 pages?\nA:  4\nB: 3\nC: 6\nD:\n\nTo determine how long it will take Joy to read 120 pages, we start by finding out her reading speed in pages per minute.\n\nFirst, we know that Joy reads 8 pages in 20 minutes. To find her reading speed in pages per minute, we divide the nu",
+  "nll": 0.406,
+  "wrong": 1
+ },
+ {
+  "q": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?",
+  "gold": "448000",
+  "prefix": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?\nA:  $1,440,000  \nB: $870,000  \nC: $935,000  \nD: $905,000\n\nTo determine the total profit James makes from selling his DVDs over 20 weeks, we need to follow these steps:\n\n1. **Calculate the revenue per DVD:**\n   The",
+  "nll": 0.723,
+  "wrong": 1
+ },
+ {
+  "q": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?",
+  "gold": "448000",
+  "prefix": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?\nA:  140,000 B: 141,984 C: 138,728 D: 140,080\nTo determine the total profit James makes in 20 weeks, we need to follow these steps:\n\n1. Calculate the revenue from selling the DVDs.\n2. Calculate the total production and costs associated with making the movies.\n3. Determine the daily profit from sel",
+  "nll": 1.297,
+  "wrong": 1
+ },
+ {
+  "q": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?",
+  "gold": "448000",
+  "prefix": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?\nA:  $91,200\nB: $98,000\nC: $142,000\nD: $73,000\n\nLet's calculate the total revenue and total costs step by step.\n\n### Total Revenue Calculation:\n- **Number of DVDs sold per day**: \\(500\\)\n- **Sales Pri",
+  "nll": 1.242,
+  "wrong": 1
+ },
+ {
+  "q": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?",
+  "gold": "448000",
+  "prefix": "James creates a media empire.  He creates a movie for $2000.  Each DVD cost $6 to make.  He sells it for 2.5 times that much.  He sells 500 movies a day for 5 days a week.  How much profit does he make in 20 weeks?\nA:  $1,499,750\nB: $1,980,000\nC: $1,998,000\nD:\n\nTo determine the profit James makes in 20 weeks, we need to follow these steps:\n\n1. **Calculate the cost of producing each DVD:**\n   - Cost per DVD = $6\n\n2. **Calc",
+  "nll": 0.75,
+  "wrong": 1
+ },
+ {
+  "q": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?",
+  "gold": "800",
+  "prefix": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?\nA:  $700\nB: $800\nC: $900\nD: $1000\n\nTo determine how much Mike will have left after buying a shirt for $200, we need to follow these steps:\n\n1. Determine the total number of parts into which the profit was divided.\n2. Calculate Mike's share of the profit.\n3. Subtract the cost of the sh",
+  "nll": 0.676,
+  "wrong": 1
+ },
+ {
+  "q": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?",
+  "gold": "800",
+  "prefix": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?\nA:  $900\nB: $1000\nC: $1100\nD: $1300 To determine how much money Mike has left after purchasing a shirt, we need to follow these steps:\n\n1. **Identify the total number of parts represented by the profit sharing ratio**:\n   The profit sharing ratio between Mike and Johnson is given",
+  "nll": 0.891,
+  "wrong": 1
+ },
+ {
+  "q": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?",
+  "gold": "800",
+  "prefix": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?\nA:  $800\nB: $1000\nC: $1200\nD: $1400\n\nLet's start by determining the amount each partner received based on the given profit-sharing ratio and the information provided.\n\nThe ratio of the profits between Mike and Johnson is 2:5. This means for every 7 parts of the total pr",
+  "nll": 0.801,
+  "wrong": 1
+ },
+ {
+  "q": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?",
+  "gold": "800",
+  "prefix": "The profit from a business transaction is shared among 2 business partners, Mike and Johnson in the ratio 2:5 respectively. If Johnson got $2500, how much will Mike have after spending some of his share on a shirt that costs $200?\nA:  $600\nB: $800\nC: $1000\nD: $1200\n\nTo determine how much Mike will have after spending some of his share on a shirt that costs $200, we need to follow these steps:\n\n1. Determine Mike's initial share of the profit.\n2. Subtract the cost of the shirt from Mike's ini",
+  "nll": 0.305,
+  "wrong": 1
+ },
+ {
+  "q": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.",
+  "gold": "43",
+  "prefix": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.\nA:  39  \nB: 70  \nC: 83  \nD: 91\n\nLet's start by determining the initial number of each type of hard hat in the truck:\n\n- Pink hard hats: \\(26\\)\n- Green hard hats: \\(15\\)\n- Yellow hard hats: \\(24\\)\n\nNext, we account for the changes when Carl removes ",
+  "nll": 0.895,
+  "wrong": 1
+ },
+ {
+  "q": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.",
+  "gold": "43",
+  "prefix": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.\nA:  57\nB: 60\nC: 63\nD: 66\n\nTo solve this problem, we need to first determine the initial counts of each type of hard hat in the truck, and then account for the changes Carl and John make.\n\nThe initial counts are:\n- Pink hard hats: 26\n- Green har",
+  "nll": 0.727,
+  "wrong": 1
+ },
+ {
+  "q": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.",
+  "gold": "43",
+  "prefix": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.\nA:  37  \nB: 58  \nC: 69  \nD: 80\nTo solve this problem, we need to follow these steps:\n\n1. Determine the initial number of each color of hard hats.\n2. Calculate how many hard hats are left after Carl and John take some away.\n\nFirst, let's find out how many hard hats remain a",
+  "nll": 0.699,
+  "wrong": 1
+ },
+ {
+  "q": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.",
+  "gold": "43",
+  "prefix": "In a truck, there are 26 pink hard hats, 15 green hard hats, and 24 yellow hard hats.  If Carl takes away 4 pink hard hats, and John takes away 6 pink hard hats and twice as many green hard hats as the number of pink hard hats that he removed, then calculate the total number of hard hats that remained in the truck.\nA:  50\nB: 73\nC: 69\nD: 58\nTo determine the total number of hard hats remaining in the truck after Carl and John have taken some away, we will follow these steps:\n\n1. **Calculate the initial number of each color of hard hats:**\n   - Pink hard hats: \\( 26 \\)\n",
+  "nll": 0.59,
+  "wrong": 1
+ },
+ {
+  "q": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?",
+  "gold": "16",
+  "prefix": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?\nA:  10\nB: 12\nC: 18\nD: 4\n\nTo determine the total time Roque spends commuting by both walking and biking, we need to calculate the time spent on each mode of transportation separately and then sum them up.\n\nFirst, let's calculate the time Roque spends walking to and from work ea",
+  "nll": 0.707,
+  "wrong": 1
+ },
+ {
+  "q": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?",
+  "gold": "16",
+  "prefix": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?\nA:  10\nB: 12\nC: 14\nD: 16\n\nTo determine the total time Roque spends commuting each week by both walking and biking, we need to calculate the time spent walking and the time spent biking separately and then sum these amounts.\n\nFirst, let's calculate the time spent walking:\n- Roque wal",
+  "nll": 0.625,
+  "wrong": 1
+ },
+ {
+  "q": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?",
+  "gold": "16",
+  "prefix": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?\nA:  10\nB: 9\nC: 8\nD: 7\n\nTo determine the total time Roque spends commuting to and from work each week, we need to consider both his walking and biking routes separately and then sum them up.\n\nFirst, let's calculate the time spent walking to and from work:\n- Roque walks to work once and ba",
+  "nll": 0.91,
+  "wrong": 1
+ },
+ {
+  "q": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?",
+  "gold": "16",
+  "prefix": "It takes Roque two hours to walk to work and one hour to ride his bike to work. Roque walks to and from work three times a week and rides his bike to and from work twice a week. How many hours in total does he take to get to and from work a week with walking and biking?\nA:  9\nB: 12\nC: 15\nD: 18\nTo determine the total time Roque spends traveling to and from work in a week, we need to break down the problem into smaller parts and then sum them up.\n\nFirst, let's calculate the time Roque spends walking to and from work each day:\n- Walking once costs him 2",
+  "nll": 0.73,
+  "wrong": 1
+ },
+ {
+  "q": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?",
+  "gold": "16",
+  "prefix": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?\nA:  16 hours\nB: 8 hours\nC: 4 hours\nD: 3 hours\n\nTo determine the total time Tim spends biking in a week, we need to break down the problem into smaller parts and calculate the time spent on each component.\n\nFirst, let's calculate the distance Tim bikes during his commute to and from w",
+  "nll": 0.699,
+  "wrong": 1
+ },
+ {
+  "q": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?",
+  "gold": "16",
+  "prefix": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?\nA:  8 hours\nB: 10 hours\nC: 4 hours\nD: 7 hours\n\nTo determine the total time Tim spends biking in a week, we need to calculate both the distance he bikes during his commute and the distance he bikes on weekends separately, and then sum these distances with his speed.\n\nFirst, let's calculate the dist",
+  "nll": 1.094,
+  "wrong": 1
+ },
+ {
+  "q": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?",
+  "gold": "16",
+  "prefix": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?\nA:  14 hr B: 8 hr C: 6 hr D: 3 hr E: None of these\n\nTo determine the total time Tim spends biking in a week, we need to break down the problem into smaller parts and calculate the time spent on different types of trips.\n\nFirst, let's calculate the distance Tim bikes during his commute:\n- Tim works every d",
+  "nll": 1.227,
+  "wrong": 1
+ },
+ {
+  "q": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?",
+  "gold": "16",
+  "prefix": "Tim rides his bike back and forth to work for each of his 5 workdays.  His work is 20 miles away.  He also goes for a weekend bike ride of 200 miles.    If he can bike at 25 mph how much time does he spend biking a week?\nA:  16hrs B: 24hrs C: 36hrs D: 74hrs\nTo determine the total time Tim spends biking in a week, we need to calculate the distance he bikes on weekdays and the weekend separately, then sum these distances with the time it takes him to cover those distances.\n\nFirst, let's calculate the distance Ti",
+  "nll": 1.234,
+  "wrong": 1
+ },
+ {
+  "q": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?",
+  "gold": "38",
+  "prefix": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?\nA:  21  \nB: 25  \nC: 29  \nD: 33\n\nTo determine the total number of stamps Bella bought, we need to calculate the number of each type of stamp she purchased step by step.\n\nFirst, we know that Bella bought 11 snowflake stamps.\n\\[ \\text{Number of snowflake stamps} = 11 ",
+  "nll": 0.441,
+  "wrong": 1
+ },
+ {
+  "q": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?",
+  "gold": "38",
+  "prefix": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?\nA:  24  \nB: 27  \nC: 30  \nD: 36\n\nTo determine the total number of stamps Bella bought, we need to calculate the number of each type of stamp she purchased step by step.\n\nFirst, we know that Bella bought 11 snowflake stamps.\n\\[ \\text{Snowflake stamp",
+  "nll": 0.447,
+  "wrong": 1
+ },
+ {
+  "q": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?",
+  "gold": "38",
+  "prefix": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?\nA:  20  \nB: 25  \nC: 30  \nD: 35\n\nTo determine the total number of stamps Bella bought, we need to calculate the number of each type of stamp she purchased and then sum them up.\n\nFirst, we know that Bella bought:\n- 11 snowflake stamps\n- 9 more truck stamps than snowflake stamps (since she boug",
+  "nll": 0.633,
+  "wrong": 1
+ },
+ {
+  "q": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?",
+  "gold": "38",
+  "prefix": "Bella bought stamps at the post office. Some of the stamps had a snowflake design, some had a truck design, and some had a rose design. Bella bought 11 snowflake stamps. She bought 9 more truck stamps than snowflake stamps, and 13 fewer rose stamps than truck stamps. How many stamps did Bella buy in all?\nA:  26  \nB: 30  \nC: 33  \nD: 38\n\nLet's denote the number of snowflake stamps Bella bought as \\( S \\), the number of truck stamps as \\( T \\), and the number of rose stamps as \\( R \\).\n\nAccording to the problem:\n- Bella bought 11 snowflake stamps.\nSo, ",
+  "nll": 0.555,
+  "wrong": 1
+ },
+ {
+  "q": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?",
+  "gold": "1080",
+  "prefix": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?\nA:  216  \nB: 90  \nC: 720  \nD: 324 To determine the total number of beetles eaten each day, we need to follow these steps:\n\n1. Calculate the number of snakes eaten by the jaguars.\n2. Calculate the number of birds eaten by the snakes.\n3. Calculate the number of beetles eaten",
+  "nll": 0.551,
+  "wrong": 1
+ },
+ {
+  "q": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?",
+  "gold": "1080",
+  "prefix": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?\nA:  216  \nB: 486  \nC: 702  \nD: 972\n\nTo determine the total number of beetles eaten each day in the forest, we need to follow these steps:\n\n1. Calculate the number of snakes eaten by all the jaguars.\n2. Use the number of snakes to find out how many birds are eaten.\n3. Fin",
+  "nll": 0.66,
+  "wrong": 1
+ },
+ {
+  "q": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?",
+  "gold": "1080",
+  "prefix": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?\nA:  480\nB: 720\nC: 960\nD: 1440 To determine the total number of beetles eaten each day in the forest, we need to follow the sequence of events and multiply the appropriate quantities together.\n\n1. **Number of snakes eaten by jaguars per day**: Each jag",
+  "nll": 0.617,
+  "wrong": 1
+ },
+ {
+  "q": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?",
+  "gold": "1080",
+  "prefix": "Each bird eats 12 beetles per day, each snake eats 3 birds per day, and each jaguar eats 5 snakes per day. If there are 6 jaguars in a forest, how many beetles are eaten each day?\nA:  216\nB: 900\nC: 1800\nD: 3240\n\nTo determine the total number of beetles eaten each day in the forest, we need to follow the given relationships step by step.\n\nFirst, let's find out how many snakes are eaten by the jaguars each day. Since each ",
+  "nll": 0.393,
+  "wrong": 1
+ },
+ {
+  "q": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?",
+  "gold": "7",
+  "prefix": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?\nA:  4  \nB: 5  \nC: 6  \nD: 7\n\nTo determine how many letters are in Samantha's last name, we need to follow these steps:\n\n1. Determine the number of letters in Jamie's last name.\n2. Use this information to find out how many letters are left after Bobbie takes two letters off her last name.\n3. Compare this result",
+  "nll": 0.703,
+  "wrong": 1
+ },
+ {
+  "q": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?",
+  "gold": "7",
+  "prefix": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?\nA:  7\nB: 8\nC: 9\nD: 10\n\nLet's denote Bobbie's last name as \\( B \\). According to the problem, if Bobbie takes two letters off her last name, she will have a last name that is twice the length of Jamie's last name. Jamie's last name is \"Grey,\" which has",
+  "nll": 0.68,
+  "wrong": 1
+ },
+ {
+  "q": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?",
+  "gold": "7",
+  "prefix": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?\nA:  5\nB: 6\nC: 7\nD: 8\n\nTo determine the number of letters in Samantha's last name, we need to follow these steps:\n\n1. Determine the number of letters in Jamie's last name.\n2. Use this information to find out how many letters Bobbie's last name originally had before taking two letters off.\n3. Calculate the n",
+  "nll": 0.641,
+  "wrong": 1
+ },
+ {
+  "q": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?",
+  "gold": "7",
+  "prefix": "Samantha’s last name has three fewer letters than Bobbie’s last name. If Bobbie took two letters off her last name, she would have a last name twice the length of Jamie’s. Jamie’s full name is Jamie Grey. How many letters are in Samantha’s last name?\nA:  4\nB: 5\nC: 6\nD: 7\n\nTo determine the number of letters in Samantha's last name, we need to follow these steps:\n\n1. Determine the number of letters in Jamie's last name.\n2. Use that information to find out how many letters Bobbie originally had in her last name.\n3. Use the relationship between the n",
+  "nll": 0.699,
+  "wrong": 1
+ },
+ {
+  "q": "Ann's favorite store was having a summer clearance. For $75 she bought 5 pairs of shorts for $7 each and 2 pairs of shoes for $10 each. She also bought 4 tops, all at the same price. How much did each top cost?",
+  "gold": "5",
+  "prefix": "Ann's favorite store was having a summer clearance. For $75 she bought 5 pairs of shorts for $7 each and 2 pairs of shoes for $10 each. She also bought 4 tops, all at the same price. How much did each top cost?\nA:  3\nB: 4\nC: 6\nD: 8\n\nTo determine the cost of each top, we need to first calculate the total amount spent on the shorts and shoes, then subtract that from the total amount spent.\n\n1. Calculate the cost of the shorts:\n   \\[\n   5 \\text{",
+  "nll": 0.363,
+  "wrong": 1
+ },
+ {
+  "q": "Ann's favorite store was having a summer clearance. For $75 she bought 5 pairs of shorts for $7 each and 2 pairs of shoes for $10 each. She also bought 4 tops, all at the same price. How much did each top cost?",
+  "gold": "5",
+  "prefix": "Ann's favorite store was having a summer clearance. For $75 she bought 5 pairs of shorts for $7 each and 2 pairs of shoes for $10 each. She also bought 4 tops, all at the same price. How much did each top cost?\nA:  $5\nB: $6\nC: $7\nD: $8\n\nTo determine the cost of each top, we need to follow these steps:\n\n1. Calculate the total cost of the shorts.\n2. Calculate the total cost of the shoes.\n3. Subtract the costs of the shorts and shoes from the total amount spent to find out how much",
+  "nll": 0.402,
+  "wrong": 1
+ }
+]
